@@ -46,15 +46,27 @@ def get_attractions():
 		
         cursor = db_connection.cursor()
 
-        select_query = """
-        select _id, name, CAT, description, address, direction, MRT, latitude, longitude, file 
-        from taipei 
-        limit 12 offset {};
-        """
-        select_query = select_query.format((page)*12)
+        # 為了預防 SQL injection, 不要直接將變數嵌入到SQL搜尋字符
+        # select_query = """
+        # select _id, name, CAT, description, address, direction, MRT, latitude, longitude, file 
+        # from taipei 
+        # limit 12 offset {};
+        # """
 
-        #print("SQL 查詢語句:", select_query)
-        cursor.execute(select_query)
+        #select_query = select_query.format((page)*12)
+
+        select_query = """
+        SELECT _id, name, CAT, description, address, direction, MRT, latitude, longitude, file 
+        FROM taipei 
+        LIMIT %s OFFSET %s;
+        """
+
+        limit = 12
+        offset = page * limit
+
+
+        cursor.execute(select_query, (limit, offset))
+
         db_result = cursor.fetchall()
         
         data = []
@@ -93,15 +105,29 @@ def get_attractions():
 		
         cursor = db_connection.cursor()
     
+        #select_query = """
+        #select _id, name, CAT, description, address, direction, MRT, latitude, longitude, file 
+        #from taipei 
+        #where MRT LIKE "%{}%" OR name LIKE "%{}%" 
+        #limit 12 offset {};
+        #"""
+
+        #select_query = select_query.format(keyword, keyword, (page)*12)
+        #cursor.execute(select_query)  
+        #db_result = cursor.fetchall()
+
+        keyword = '%' + keyword + '%'
+       
         select_query = """
-        select _id, name, CAT, description, address, direction, MRT, latitude, longitude, file 
-        from taipei 
-        where MRT LIKE "%{}%" OR name LIKE "%{}%" 
-        limit 12 offset {};
+        SELECT _id, name, CAT, description, address, direction, MRT, latitude, longitude, file 
+        FROM taipei 
+        WHERE MRT LIKE %s OR name LIKE %s
+        LIMIT 12 OFFSET %s
         """
         
-        select_query = select_query.format(keyword, keyword, (page)*12)
-        cursor.execute(select_query)  
+        limit = 12
+        offset = page * limit
+        cursor.execute(select_query, (keyword, keyword, offset))
         db_result = cursor.fetchall()
         
         data = []
@@ -149,10 +175,9 @@ def get_attraction(attractionIdStr):
             cursor = db_connection.cursor()
         
             select_query = """
-            select _id, name, CAT, description, address, direction, MRT, latitude, longitude, file from taipei where _id = "{}";
+            select _id, name, CAT, description, address, direction, MRT, latitude, longitude, file from taipei where _id = %s;
             """
-            select_query = select_query.format(attractionId)
-            cursor.execute(select_query)  
+            cursor.execute(select_query, (attractionId, ))  
             db_result = cursor.fetchall()
         
             i = db_result[0]

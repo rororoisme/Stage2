@@ -38,18 +38,69 @@ def get_attractions():
     keyword = request.args.get("keyword")
 
     # 伺服器內部錯誤 (StatusCode:500)
-    if pageStr is None or keyword is None:
+    if pageStr is None and keyword is None:
         return {"error": True, "message": "伺服器內部錯誤"}, 500
-    # 正常運作 (StatusCode:200)
+    # 不給定關鍵字 (StatusCode:200)
+    elif keyword is None:
+        page = int(pageStr)
+		
+        cursor = db_connection.cursor()
+
+        select_query = """
+        select _id, name, CAT, description, address, direction, MRT, latitude, longitude, file 
+        from taipei 
+        limit 12 offset {};
+        """
+        select_query = select_query.format((page)*12)
+
+        #print("SQL 查詢語句:", select_query)
+        cursor.execute(select_query)
+        db_result = cursor.fetchall()
+        
+        data = []
+        for i in db_result :
+            result = {
+                  "id": i[0],
+                  "name": i[1],
+                  "category": i[2],
+                  "description": i[3],
+                  "address": i[4],
+                  "transport": i[5],
+                  "mrt": i[6],
+                  "lat": i[7],
+                  "lng": i[8],
+                  "images": []
+            }
+           
+            # 處理images欄位
+            imgStr = i[9]
+            # 依照http切割成list
+            imgList = imgStr.split("http")
+            for i in imgList:
+                if i != "":
+                    # 統一小寫 + 挑選jpg,png字串內容
+                    if "jpg" in i.lower() or "png" in i.lower():
+                        # 加回http字串, 處理第一個切割點會是空的內容
+                        result["images"].append("http" + i)
+
+            data.append(result) 
+            
+        response = {"nextPage":page+1,"data":data}
+        return response, 200   
+    # 給定關鍵字 (StatusCode:200)
     else:
         page = int(pageStr)
 		
         cursor = db_connection.cursor()
     
         select_query = """
-        select _id, name, CAT, description, address, direction, MRT, latitude, longitude, file from taipei where MRT = "{}" limit 12 offset {};
+        select _id, name, CAT, description, address, direction, MRT, latitude, longitude, file 
+        from taipei 
+        where MRT LIKE "%{}%" OR name LIKE "%{}%" 
+        limit 12 offset {};
         """
-        select_query = select_query.format(keyword, (page-1)*12)
+        
+        select_query = select_query.format(keyword, keyword, (page)*12)
         cursor.execute(select_query)  
         db_result = cursor.fetchall()
         

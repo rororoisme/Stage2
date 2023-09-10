@@ -176,14 +176,17 @@ function searchKeywords() {
 
 
 let scrollBottomFlag = true;
+// 為了防止重複載入, 觀察載入狀況
+let isLoading = false;
 window.addEventListener('scroll', function() {
 
     const footerElement = document.querySelector('footer');
     const bottom = footerElement.getBoundingClientRect().bottom;
 
     if (bottom - window.innerHeight < 10 ) {
-        if (!scrollBottomFlag) {
-            scrollBottomFlag = true;
+        if (!scrollBottomFlag && !isLoading) {
+            // 正在加載數據時, 將isLoading設置為true
+            isLoading = true;
 
             let url = `/api/attractions?page=` + nextPage;
             if (keyword != "")
@@ -201,8 +204,6 @@ window.addEventListener('scroll', function() {
                 let arr = data["data"];
                 console.log("到底了 : " + arr.length)
                 if (arr.length != 0) {
-                    
-                
                     const attractionsGroup = document.querySelector('.attractionsGroup');
                     attractionsGroup.classList.add('container');
                     // 迴圈建立各個景點的畫面元素
@@ -249,6 +250,8 @@ window.addEventListener('scroll', function() {
                         // 把裝有每個景點的<div>加入到主容器, 顯示在網頁上
                         attractionsGroup.appendChild(attractionElement);
                     };
+                    // 頁面載入完成後, 再將isLoading設置為false
+                    isLoading = false;
                 }
             })   
         }

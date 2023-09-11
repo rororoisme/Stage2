@@ -65,12 +65,12 @@ def get_attractions():
         FROM taipei 
         LIMIT %s OFFSET %s;
         """
-
+    
         limit = 12
-        offset = page * limit
+        offset = page * limit 
 
 
-        cursor.execute(select_query, (limit, offset))
+        cursor.execute(select_query, (limit + 1, offset))
         db_result = cursor.fetchall()
         cursor.close()
         conn.close()
@@ -102,8 +102,12 @@ def get_attractions():
                         result["images"].append("http" + i)
 
             data.append(result) 
-            
-        response = {"nextPage":page+1,"data":data}
+        # 防止無限讀取nextPage
+        if (len(data) < 13):
+            response = {"nextPage":None,"data":data}
+        else:
+            response = {"nextPage":page + 1,"data":data[0:12]}
+        
         return response, 200   
     # 給定關鍵字 (StatusCode:200)
     else:
@@ -129,12 +133,12 @@ def get_attractions():
         SELECT _id, name, CAT, description, address, direction, MRT, latitude, longitude, file 
         FROM taipei 
         WHERE MRT LIKE %s OR name LIKE %s
-        LIMIT 12 OFFSET %s
+        LIMIT %s OFFSET %s
         """
         
         limit = 12
         offset = page * limit
-        cursor.execute(select_query, (keyword, keyword, offset))
+        cursor.execute(select_query, (keyword, keyword, limit+1, offset))
         db_result = cursor.fetchall()
         cursor.close()
         conn.close()
@@ -166,8 +170,10 @@ def get_attractions():
                         result["images"].append("http" + i)
 
             data.append(result) 
-            
-        response = {"nextPage":page+1,"data":data}
+        if (len(data) <13):
+            response = {"nextPage":None, "data":data}
+        else:
+            response = {"nextPage":page+1,"data":data[0:12]}
         return response, 200
 
 

@@ -271,7 +271,8 @@ img {
     font-size: 16px;
     font-weight: 700;
     position: absolute;
-    width: 100%;
+    width: 261px;
+    height: 40px;
     bottom: 0;
     opacity: 0.6;
     background: #000;

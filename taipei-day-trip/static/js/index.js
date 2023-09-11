@@ -43,6 +43,7 @@ function searchMrt(elem) {
     searchKeywords();
 }
 
+
 // 載入頁面圖案
 fetch(`/api/attractions?page=0`, {
     method: "GET",
@@ -102,9 +103,10 @@ fetch(`/api/attractions?page=0`, {
         // 把裝有每個景點的<div>加入到主容器, 顯示在網頁上
         attractionsGroup.appendChild(attractionElement);
     };
-
 })   
 
+
+// 關鍵字搜尋
 function searchKeywords() {
     keyword = document.querySelector(".searchInput").value;
     nextPage = 0;
@@ -170,11 +172,11 @@ function searchKeywords() {
             // 把裝有每個景點的<div>加入到主容器, 顯示在網頁上
             attractionsGroup.appendChild(attractionElement);
         };
-    
     })   
 }
 
 
+// 防止重複載入
 let scrollBottomFlag = true;
 // 為了防止重複載入, 觀察載入狀況
 let isLoading = false;
@@ -187,7 +189,6 @@ window.addEventListener('scroll', function() {
         if (!scrollBottomFlag && !isLoading) {
             // 正在加載數據時, 將isLoading設置為true
             isLoading = true;
-
             let url = `/api/attractions?page=` + nextPage;
             if (keyword != "")
                 url = url + "&keyword=" + keyword;
@@ -250,19 +251,14 @@ window.addEventListener('scroll', function() {
                         // 把裝有每個景點的<div>加入到主容器, 顯示在網頁上
                         attractionsGroup.appendChild(attractionElement);
                     };
-                    // 頁面載入完成後, 再將isLoading設置為false
-                    isLoading = false;
                 }
-            })   
+            }).finally(function() {
+                // 無論成功或失敗, 都將isLoading設置為false
+                // 若放在迴圈當中, 某些狀況造成狀態無法重置
+                isLoading = false;
+            });
         }
-    } else if (bottom - window.innerHeight > 200) {
+    } else if (bottom - window.innerHeight > 5) {
         scrollBottomFlag = false;
     }
 });
-
-
-
-
-
-
-

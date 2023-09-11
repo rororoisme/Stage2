@@ -45,6 +45,7 @@ img {
 
 .navigationBtn {
     font-family: "Noto Sans TC", sans-serif;
+    font-weight: 500;
     font-size: 16px;
     line-height: 13.3px;
     padding: 10px;
@@ -59,7 +60,7 @@ img {
     font-size: 30px;
     font-style: normal;
     line-height: 34px;
-    font-weight: bold;  
+    font-weight: 700;  
 }
 
 /********** slogan **********/
@@ -112,7 +113,7 @@ img {
     border: none;
     border-radius: 6px 0px 0px 6px;
     font-family: "Noto Sans TC", sans-serif;
-    font-weight: bold;
+    font-weight: 700;
     font-size: 16px;
     outline: none;
 }
@@ -176,7 +177,7 @@ img {
     font-family: "Noto Sans TC", sans-serif;
     font-size: 16px;
     font-style: normal;
-    font-weight: bold;
+    font-weight: 500;
     color:#666;
 }
 
@@ -268,6 +269,7 @@ img {
 .textonimage {
     font-family: "Noto Sans TC",sans-serif;
     font-size: 16px;
+    font-weight: 700;
     position: absolute;
     width: 100%;
     bottom: 0;
@@ -280,6 +282,7 @@ img {
 }
 
 .textunderimagegroup {
+    font-weight: 500;
     font-size: 20px;
     display: flex;
     justify-content: space-between;
@@ -321,7 +324,7 @@ footer {
     align-items: center;
     height: 104px;
     font-family: "Noto Sans TC", sans-serif;
-    font-weight: bold;
+    font-weight: 700;
     font-size: 16px;
     background-color: #757575;
     color: #fff;
@@ -341,9 +344,10 @@ footer {
         width: 90%;
     }
     
-    .littlepic {
-        max-width: 100%;
+    .product {
+        width: 45%
     }
+
 }
 
 @media (max-width: 800px) {

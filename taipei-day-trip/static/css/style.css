@@ -337,6 +337,10 @@ footer {
         width: 100%;
     }
 
+    .textonimage {
+        width: 100%;
+    }
+    
     .attractionsGroup {
         justify-content: space-evenly;
     }

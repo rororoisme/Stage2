@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaipeiDayTrip</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- navigation -->
+    <div class="navigation">
+        <div class="navigationBox">
+            <div class="frame2">
+                <div class="navigationText">台北一日遊</div>
+            </div>
+            <div class="frame1">
+                <botton class="navigationBtn">預定行程</botton>
+                <botton class="navigationBtn">登入/註冊</botton>
+            </div>
+        </div>
+    </div>
+    <!-- slogan -->
+    <div>
+        <div class="sloganBox">
+            <div class="slogan">
+                <h2>輕鬆享受台北一日悠閒</h2>
+                <h3>探索每個角落，體驗城市的深度旅遊行程</h3>
+            <div class="search">
+                <div class="searchBox">
+                    <input class="searchInput" placeholder="輸入景點名稱查詢"/>
+                    <div class="searchBtn" onclick="searchKeywords()"></div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- main -->
+    <div class="main">
+        <div class="mainBox">
+            <div class="listBar">
+                <div class="leftArrowBox" ><img class="leftArrow" src="/static/images/left_arrow.png" onclick="leftScroll()"></div>
+                <div class="listBarContainer"></div>
+                <div class="rightArrowBox"><img class="rightArrow" src="/static/images/right_arrow.png" onclick="rightScroll()"></div>
+            </div>
+        </div>
+        <div class="attractionsGroup">
+            <!-- <div class="attractionsContainer"></div> -->
+        </div>
+    </div>
+    <!-- footer -->
+    <footer>COPYRIGHT © 2021 台北一日遊</footer>
+    <script src="/static/js/index.js"></script>
+</body>
+</html>

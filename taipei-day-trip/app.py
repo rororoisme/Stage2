@@ -7,13 +7,17 @@ app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 
 
+# 建立資料
 # 建立資料庫連線
-db_connection=mysql.connector.connect(
-    user="root",
-    password="mynewpassword",
-    host="localhost",
-    database="taipei"
-)
+def get_conn():
+    db_connection= mysql.connector.connect(
+        user="root",
+        password="mynewpassword",
+        host="localhost",
+        database="taipei"
+    )
+    return db_connection
+
 
 # Pages
 @app.route("/")
@@ -44,7 +48,8 @@ def get_attractions():
     elif keyword is None:
         page = int(pageStr)
 		
-        cursor = db_connection.cursor()
+        conn = get_conn()
+        cursor = conn.cursor()
 
         # 為了預防 SQL injection, 不要直接將變數嵌入到SQL搜尋字符
         # select_query = """
@@ -60,14 +65,15 @@ def get_attractions():
         FROM taipei 
         LIMIT %s OFFSET %s;
         """
-
+    
         limit = 12
-        offset = page * limit
+        offset = page * limit 
 
 
-        cursor.execute(select_query, (limit, offset))
-
+        cursor.execute(select_query, (limit + 1, offset))
         db_result = cursor.fetchall()
+        cursor.close()
+        conn.close()
         
         data = []
         for i in db_result :
@@ -96,14 +102,19 @@ def get_attractions():
                         result["images"].append("http" + i)
 
             data.append(result) 
-            
-        response = {"nextPage":page+1,"data":data}
+        # 防止無限讀取nextPage
+        if (len(data) < 13):
+            response = {"nextPage":None,"data":data}
+        else:
+            response = {"nextPage":page + 1,"data":data[0:12]}
+        
         return response, 200   
     # 給定關鍵字 (StatusCode:200)
     else:
         page = int(pageStr)
 		
-        cursor = db_connection.cursor()
+        conn = get_conn()
+        cursor = conn.cursor()
     
         #select_query = """
         #select _id, name, CAT, description, address, direction, MRT, latitude, longitude, file 
@@ -122,13 +133,15 @@ def get_attractions():
         SELECT _id, name, CAT, description, address, direction, MRT, latitude, longitude, file 
         FROM taipei 
         WHERE MRT LIKE %s OR name LIKE %s
-        LIMIT 12 OFFSET %s
+        LIMIT %s OFFSET %s
         """
         
         limit = 12
         offset = page * limit
-        cursor.execute(select_query, (keyword, keyword, offset))
+        cursor.execute(select_query, (keyword, keyword, limit+1, offset))
         db_result = cursor.fetchall()
+        cursor.close()
+        conn.close()
         
         data = []
         for i in db_result :
@@ -157,8 +170,10 @@ def get_attractions():
                         result["images"].append("http" + i)
 
             data.append(result) 
-            
-        response = {"nextPage":page+1,"data":data}
+        if (len(data) <13):
+            response = {"nextPage":None, "data":data}
+        else:
+            response = {"nextPage":page+1,"data":data[0:12]}
         return response, 200
 
 
@@ -172,13 +187,16 @@ def get_attraction(attractionIdStr):
             return {"error": True, "message": "景點編號不正確"}, 400    
         # 景點資料 (StatusCode:200)
         else:
-            cursor = db_connection.cursor()
-        
+            conn = get_conn()
+            cursor = conn.cursor()
+            
             select_query = """
             select _id, name, CAT, description, address, direction, MRT, latitude, longitude, file from taipei where _id = %s;
             """
             cursor.execute(select_query, (attractionId, ))  
             db_result = cursor.fetchall()
+            cursor.close()
+            conn.close()
         
             i = db_result[0]
             result = {
@@ -218,17 +236,19 @@ def get_attraction(attractionIdStr):
 @app.route("/api/mrts")
 def get_mrts():
     try:
-        cursor = db_connection.cursor()
+        conn = get_conn()
+        cursor = conn.cursor()
         
         select_query = """
         select MRT from taipei group by MRT order by count(MRT) desc;
         """
         cursor.execute(select_query)  
         db_result = cursor.fetchall()
+        cursor.close()
+        conn.close()
         
         data = []
         for i in db_result:
-            print(i)
             if i[0] is not None:
                 data.append(i[0])
 

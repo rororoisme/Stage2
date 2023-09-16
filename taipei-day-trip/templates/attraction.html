@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaipeiDayTrip</title>
+    <link rel="stylesheet" href="/static/css/attraction.css">
+</head>
+<body>
+    <!-- navigation -->
+    <div class="navigation">
+        <div class="navigationBox">
+            <div class="frame2">
+                <div class="navigationText">台北一日遊</div>
+            </div>
+            <div class="frame1">
+                <botton class="navigationBtn">預定行程</botton>
+                <botton class="navigationBtn">登入/註冊</botton>
+            </div>
+        </div>
+    </div>
+    <!-- section -->
+    <div class="section">
+        <div class="picture_current">
+            <div class="left_arrow"></div>
+            <div class="right_arrow"></div>
+            <div class="circle"></div>
+        </div>
+        <div class="profile">
+            <div>
+                <h2></h2>
+                <p></p>
+            </div>
+            <div class="booking_form">
+                <h2>訂購導覽行程</h2>
+                <p>以此景點為中心的一日行程，帶您探索城市角落故事</p>
+                <div class="date_field">選擇日期：
+                    <input type="date" class="date">
+                </div>
+                <div class="time_field">選擇時間：
+                    <div class="check_right" onclick="check_right()">
+                        上半天
+                    </div>
+                    <div class="check_left" onclick="check_left()">
+                        下半天
+                    </div>
+                </div>
+                <div class="price_field">導覽費用：</div>
+                <div class="booking_btn">
+                    <button class="reserve">開始預約行程</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="separator"></div>
+    <!-- infors -->
+    <div class="infors">
+        <div class="infors_text"></div>
+        <div class="addressTop">景點地址：</div>
+        <div class="addressText"></div>
+        <div class="trafficTop">交通方式：</div>
+        <div class="trafficText"></div>
+    </div>
+    <!-- footer -->
+    <footer>COPYRIGHT © 2021 台北一日遊</footer>
+    <script src="/static/js/attraction.js"></script>
+</body>
+</html>

@@ -68,6 +68,12 @@ fetch(`/api/attractions?page=0`, {
         attractionElement.classList.add('attraction');
         attractionElement.classList.add('product');
 
+        function clickAttraction(){
+            let id = attraction["id"];
+            jumpToAttraction(id);
+        }
+        attractionElement.addEventListener('click', clickAttraction);
+
         // 圖片以及景點名稱的group
         const imageGroup = document.createElement('div');
         imageGroup.classList.add("imagegroup");
@@ -136,6 +142,11 @@ function searchKeywords() {
             const attractionElement = document.createElement('div');
             attractionElement.classList.add('attraction');
             attractionElement.classList.add('product');
+            function clickAttraction(){
+                let id = attraction["id"];
+                jumpToAttraction(id);
+            }
+            attractionElement.addEventListener('click', clickAttraction);
     
             // 圖片以及景點名稱的group
             const imageGroup = document.createElement('div');
@@ -217,7 +228,11 @@ window.addEventListener('scroll', function() {
                             const attractionElement = document.createElement('div');
                             attractionElement.classList.add('attraction');
                             attractionElement.classList.add('product');
-                    
+                            function clickAttraction(){
+                                let id = attraction["id"];
+                                jumpToAttraction(id);
+                            }
+                            attractionElement.addEventListener('click', clickAttraction);
                             // 圖片以及景點名稱的group
                             const imageGroup = document.createElement('div');
                             imageGroup.classList.add("imagegroup");
@@ -265,3 +280,18 @@ window.addEventListener('scroll', function() {
         scrollBottomFlag = false;
     }
 });
+
+
+function jumpToAttraction(id) {
+    window.location.href = "/attraction/" + id;
+}
+
+
+
+
+// 3 - 4
+// > 1.要再圖片點擊的時候跳到別的頁面
+// > 2. 圖片點籍的時候去call function
+// > 2-1 圖片加上click 
+// > 3. functioin 內容是跳到別的頁面
+// > 4. 要可以跟據警點跳不同頁面

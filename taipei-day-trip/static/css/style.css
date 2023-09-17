@@ -23,6 +23,8 @@ img {
     margin-bottom: 54px;
     background-color: #fff;
     position: fixed;
+    z-index: 999;
+    border-bottom: 1px solid #e8e8e8;
 }
 
 .navigationBox {

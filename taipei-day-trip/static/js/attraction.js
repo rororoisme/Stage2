@@ -1,10 +1,14 @@
 let pictureElem = document.querySelector(".picture_current")
 let profileElem = document.querySelector(".profile")
 
-// 取得資料ID
+// 取得景點ID
 const url = window.location.href; 
 const arr = url.split("/");
 const attractionId = arr[arr.length-1];
+
+let attractionImages = [];
+let currentImageIndex = 0;
+
 // 展示景點資訊
 fetch(`/api/attraction/${attractionId}`, {
     method: "GET",
@@ -15,11 +19,10 @@ fetch(`/api/attraction/${attractionId}`, {
 .then(function(response) {
     return response.json();
 }).then(function(data){
-    init(data);
-    setEventListener(data)
+    console.log(data)
     // 獲取所需的資料內容
     let originalData = data["data"];
-    let attractionImages = data["images"];
+    attractionImages = originalData["images"];
     let attractionName = originalData["name"];
     let attractionCategory = originalData["category"];
     let attractionMrt = originalData["mrt"];
@@ -27,109 +30,116 @@ fetch(`/api/attraction/${attractionId}`, {
     let attractionAddress = originalData["address"];
     let attractionTransport = originalData["transport"];
 
-    // 根據CSS選取html元素
-    let pictureElem = document.querySelector(".picture_current");
+    // 根據class名稱瞄準資料位置
+    let pictureElem = document.querySelector(".picture");
     let containerElem = document.querySelector(".profile")
     let descriptionElem = document.querySelector(".infors_text");
     let addressElem = document.querySelector(".addressText");
     let transportElem = document.querySelector(".trafficText");
+    let profileH2Elem = document.querySelector(".profileH2")
+    let profilePElem = document.querySelector(".profileP")
 
     // 將獲得的變數放到前端切好的區塊
-    pictureElem.src = attractionImages[0];
-
-
-    const section = document.querySelector('.')
-
-
-
-    // 1. 把資料塞好
-
-    // 2. 做監聽事件
-  
+    // html元素 = 資料內容
+    pictureElem.src = attractionImages[0]
+    profileH2Elem.textContent = attractionName
+    profilePElem.textContent = attractionCategory + " at " + attractionMrt
+    descriptionElem.textContent = attractionDescription
+    addressElem.textContent = attractionAddress
+    transportElem.textContent = attractionTransport
+    addCircle(attractionImages.length);
 })
-
-
-
-
-// // 照片輪播
-// fetch(`/api/attraction/${attractionId}`, {
-//     method: "GET",
-//     headers: {
-//         "Content-Type": "application/json",
-//     },
-// })
-// .then(function(response) {
-//     return response.json();
-// }).then(function(data){
-//     console.log(data)
-//     // 1.塞第一張圖
-//     // 2.for迴圈，幾張圖就塞幾個點
-
-//     let imageUrlArr = [XXXXXXXX, XXXXXXX, XXXXXXX]
-//     for (imageUrlArr) {
-//         let imageUrl = imageUrlArr[i]
-//         function aaaa() {
-//             changeImage(imageUrl);
-//         }
-//         let circle = createElem...
-//         circle.evnetListener('click', aaaa);
-
-
-//         xxx.addChild(circle);
-//     }
-
-// })
-fetch(`/api/attraction/${attractionId}`, {
-    method: "GET",
-    headers: {
-        "Content-Type": "application/json",
-    },
-})
-.then(function(response) {
-    return response.json();
-}).then(function(data){
-    // 獲取所需的資料內容
-    let originalData = data["data"];
-    let attractionImages = originalData["images"];
-    let imagesCount = images.length ????
-    
-
-    })
-
-function changeImage(url) {
-    let image = querySelector(".image")
-    image.src = url 
-}
-
-
 
 
 // 時段收費
-// 點上半天-> 費用內容置換-> 自己變綠色-> 另一個選項變白色
-function check_right() {
-    const price_field = document.querySelector('.price_field');
-    price_field.textContent = "導覽費用：2000";
-    money = 2000;
+function check_am() {
+    const price_field = document.querySelector('.price_fieldText');
+    price_field.textContent = "新台幣 2000 元";
 
-    const check_right = document.querySelector('.check_right');
-    check_right.style.backgroundColor = 'green';
+    const check_right = document.querySelector('.check_am');
+    check_right.src = "/static/images/greenBtn.png";
  
-    const check_left = document.querySelector('.check_left');
-    check_left.style.backgroundColor = 'white';
-    
+    const check_left = document.querySelector('.check_pm');
+    check_left.src = "/static/images/circleBtn.png"
 }
 
-function check_left() {
-    const price_field = document.querySelector('.price_field');
-    price_field.textContent = "導覽費用：2500";
+function check_pm() {
+    const price_field = document.querySelector('.price_fieldText');
+    price_field.textContent = "新台幣 2500 元";
 
-    const check_right = document.querySelector('.check_right');
-    check_right.style.backgroundColor = 'white';
+    const check_right = document.querySelector('.check_am');
+    check_right.src = "/static/images/circleBtn.png"
 
-    const check_left = document.querySelector('.check_left');
-    check_left.style.backgroundColor = 'green';
-    
+    const check_left = document.querySelector('.check_pm');
+    check_left.src = "/static/images/greenBtn.png";
+}
+
+// 圖片往左播放
+function previousPicture() {
+    if (currentImageIndex != 0 ) {
+        currentImageIndex = currentImageIndex - 1;
+    } else {
+        currentImageIndex = attractionImages.length - 1;
+    }
+
+    let url = attractionImages[currentImageIndex];
+    let pictureElem = document.querySelector(".picture");
+    pictureElem.src = url;
+    changeCircleColor(currentImageIndex);
+}
+
+// 圖片往右播放
+function nextPicture() {
+// index 0~, length 1~
+    if (currentImageIndex  < attractionImages.length -1) {
+        currentImageIndex = currentImageIndex +1;
+    } else {
+        currentImageIndex = 0;
+    }
+
+    let url = attractionImages[currentImageIndex];
+    let pictureElem = document.querySelector(".picture");
+    pictureElem.src = url;
+    changeCircleColor(currentImageIndex);
+}
+
+// 置換圓點的顏色, index=總張數, i=目前張數
+function changeCircleColor(index) {
+    let circleArr = document.querySelectorAll(".circle");
+    for (let i = 0; i < circleArr.length; i++) {
+        if (i == index) {
+            circleArr[i].src = "/static/images/blackBtn.png";
+        } else {
+            circleArr[i].src = "/static/images/circleBtn.png";
+        }
+    }
 }
 
 
+// 產生照片個數的圓點
+function addCircle(length){
+    let circleGroupElem = document.querySelector(".circleGroup")
+    for (let i=0; i < length; i++){
+        //注意與左右箭頭換圖片時,照片順序不同步的問題
+        let circle = document.createElement('img');
+        circle.classList.add('circle');
+        circle.src = "/static/images/circleBtn.png";
+        if(i==0){
+            circle.classList.add("check");
+            circle.src = "/static/images/blackBtn.png";
+        }
+        circle.addEventListener("click", () => {
+            let pictureElem = document.querySelector(".picture");
+            pictureElem.src = attractionImages[i];
+            currentImageIndex = i;
+            
+            changeCircleColor(i);
+        });
+        circleGroupElem.appendChild(circle);  
+    }
+}
 
+// title導回首頁
+function backToHome() {
+    window.location.href = "/"
+}

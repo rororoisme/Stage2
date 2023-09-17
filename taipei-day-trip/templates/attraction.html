@@ -10,7 +10,7 @@
     <!-- navigation -->
     <div class="navigation">
         <div class="navigationBox">
-            <div class="frame2">
+            <div class="frame2" onclick="backToHome()">
                 <div class="navigationText">台北一日遊</div>
             </div>
             <div class="frame1">
@@ -20,46 +20,45 @@
         </div>
     </div>
     <!-- section -->
-    <div class="section">
-        <div class="picture_current">
-            <div class="left_arrow"></div>
-            <div class="right_arrow"></div>
-            <div class="circle"></div>
-        </div>
-        <div class="profile">
-            <div>
-                <h2></h2>
-                <p></p>
-            </div>
-            <div class="booking_form">
-                <h2>訂購導覽行程</h2>
-                <p>以此景點為中心的一日行程，帶您探索城市角落故事</p>
-                <div class="date_field">選擇日期：
-                    <input type="date" class="date">
+    <div class="mainContainer">
+        <div class="sectionContainer">
+            <div class="section">
+                <div class="picture_current">
+                    <img class="picture"></img>
+                    <img class="left_arrow" onclick="previousPicture();" src="/static/images/left_arrow.png">
+                    <img class="right_arrow" onclick="nextPicture()" src="/static/images/right_arrow.png">
+                    <div class="circleGroup"></div>
                 </div>
-                <div class="time_field">選擇時間：
-                    <div class="check_right" onclick="check_right()">
-                        上半天
+                <div class="profile">
+                    <div class="profileH2"></div>
+                    <div class="profileP"></div>
+                    <div class="booking_form">
+                        <h2 class="bookingH2">訂購導覽行程</h2>
+                        <p class="bookingP">以此景點為中心的一日行程，帶您探索城市角落故事</p>
+                        <div class="date_field">選擇日期：
+                            <input type="date" class="date">
+                        </div>
+                        <div class="time_field">選擇時間：
+                            <img src="/static/images/circleBtn.png" class="check_am" onclick="check_am()"><div class="time_fieldText">上半天</div>
+                            <img src="/static/images/circleBtn.png" class="check_pm" onclick="check_pm()"><div class="time_fieldText">下半天</div>
+                        </div>
+                        <div class="price_field">導覽費用：<div class="price_fieldText"></div></div>
+                        <div class="booking_btn"><button class="reserveBtn">開始預約行程</button></div>
                     </div>
-                    <div class="check_left" onclick="check_left()">
-                        下半天
-                    </div>
-                </div>
-                <div class="price_field">導覽費用：</div>
-                <div class="booking_btn">
-                    <button class="reserve">開始預約行程</button>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="separator"></div>
-    <!-- infors -->
-    <div class="infors">
-        <div class="infors_text"></div>
-        <div class="addressTop">景點地址：</div>
-        <div class="addressText"></div>
-        <div class="trafficTop">交通方式：</div>
-        <div class="trafficText"></div>
+        <div class="separatorContainer"><hr class="separator"></div>
+        <!-- infors -->
+        <div class="inforsContainer">
+            <div class="infors">
+                <div class="infors_text"></div>
+                <div class="addressTop">景點地址：</div>
+                <div class="addressText"></div>
+                <div class="trafficTop">交通方式：</div>
+                <div class="trafficText"></div>
+            </div>
+        </div>
     </div>
     <!-- footer -->
     <footer>COPYRIGHT © 2021 台北一日遊</footer>

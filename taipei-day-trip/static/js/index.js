@@ -285,13 +285,3 @@ window.addEventListener('scroll', function() {
 function jumpToAttraction(id) {
     window.location.href = "/attraction/" + id;
 }
-
-
-
-
-// 3 - 4
-// > 1.要再圖片點擊的時候跳到別的頁面
-// > 2. 圖片點籍的時候去call function
-// > 2-1 圖片加上click 
-// > 3. functioin 內容是跳到別的頁面
-// > 4. 要可以跟據警點跳不同頁面

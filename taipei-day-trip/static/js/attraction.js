@@ -55,23 +55,11 @@ fetch(`/api/attraction/${attractionId}`, {
 function check_am() {
     const price_field = document.querySelector('.price_fieldText');
     price_field.textContent = "新台幣 2000 元";
-
-    const check_right = document.querySelector('.check_am');
-    check_right.src = "/static/images/greenBtn.png";
- 
-    const check_left = document.querySelector('.check_pm');
-    check_left.src = "/static/images/circleBtn.png"
 }
 
 function check_pm() {
     const price_field = document.querySelector('.price_fieldText');
     price_field.textContent = "新台幣 2500 元";
-
-    const check_right = document.querySelector('.check_am');
-    check_right.src = "/static/images/circleBtn.png"
-
-    const check_left = document.querySelector('.check_pm');
-    check_left.src = "/static/images/greenBtn.png";
 }
 
 // 圖片往左播放

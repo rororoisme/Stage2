@@ -39,9 +39,11 @@
                             <input type="date" class="date">
                         </div>
                         <div class="time_field">選擇時間：
-                            <img src="/static/images/circleBtn.png" class="check_am" onclick="check_am()"><div class="time_fieldText">上半天</div>
-                            <img src="/static/images/circleBtn.png" class="check_pm" onclick="check_pm()"><div class="time_fieldText">下半天</div>
-                        </div>
+                            <input class="magic-radio check_am" type="radio" name="radio" id="r1" value="option1" onclick="check_am()">
+                            <label for="r1" class="radio1">上半天</label>                                                      
+                            <input class="magic-radio check_pm" type="radio" name="radio" id="r2" value="option2" onclick="check_pm()">
+                            <label for="r2" class="radio2">下半天</label>
+                          </div>
                         <div class="price_field">導覽費用：<div class="price_fieldText"></div></div>
                         <div class="booking_btn"><button class="reserveBtn">開始預約行程</button></div>
                     </div>

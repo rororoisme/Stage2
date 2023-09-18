@@ -188,6 +188,19 @@ img {
     padding-top: 15px; 
 }
 
+.date {
+    padding: 5px 10px 5px 10px;
+    width: 193px;
+    height: 35px;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+}
+
+label {
+    display: flex;
+}
+
 .time_field {
     font-size: 16px;
     font-weight: 700;
@@ -213,6 +226,54 @@ img {
     margin: 0px 5px 0px 10px;
 }
 
+.magic-radio {
+    position: absolute;
+    display: none;
+  }
+  
+.magic-radio + label {
+    font-size: 16px;
+    font-weight: 500;
+    position: relative;
+    padding-left: 30px;
+    margin-right: 18px;
+}
+  
+.magic-radio + label:before {
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    content: "";
+}
+  
+.magic-radio + label:after {
+    position: absolute;
+    display: none;
+    content: "";
+}
+  
+.magic-radio:checked + label:after {
+    display: block;
+}
+  
+.magic-radio + label:before {
+    border-radius: 50%;
+    background-color: #fff;
+}
+  
+  
+.magic-radio + label:after {
+    top: 4px;
+    left: 7px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #489;
+}
+
 .price_field {
     display: flex;
     font-size: 16px;
@@ -233,6 +294,7 @@ img {
     width: max-content;
     border-radius: 5px;
     margin-top: 20px;
+    border: none;
 }
 
 .separatorContainer {
@@ -331,7 +393,7 @@ footer {
     }
 
     .separator {
-        margin: 30px 0px;
+        margin: 10px 0px;
     }
 
     .profileH2 {
@@ -344,8 +406,8 @@ footer {
     }
 
     .date {
-        width: 100px;
-        font-size: 10px;
+        height: 20px;
+        width: 150px;
     }
 
     .reserveBtn {
@@ -418,11 +480,6 @@ footer {
 
     .date_field {
         margin-bottom: 5px;
-    }
-
-    .date {
-        width: 100px;
-        font-size: 16px;
     }
 
     .reserveBtn {

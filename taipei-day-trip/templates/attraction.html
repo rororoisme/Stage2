@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaipeiDayTrip</title>
+    <link rel="stylesheet" href="/static/css/attraction.css">
+</head>
+<body>
+    <!-- navigation -->
+    <div class="navigation">
+        <div class="navigationBox">
+            <div class="frame2" onclick="backToHome()">
+                <div class="navigationText">台北一日遊</div>
+            </div>
+            <div class="frame1">
+                <botton class="navigationBtn">預定行程</botton>
+                <botton class="navigationBtn">登入/註冊</botton>
+            </div>
+        </div>
+    </div>
+    <!-- section -->
+    <div class="mainContainer">
+        <div class="sectionContainer">
+            <div class="section">
+                <div class="picture_current">
+                    <img class="picture"></img>
+                    <img class="left_arrow" onclick="previousPicture();" src="/static/images/left_arrow.png">
+                    <img class="right_arrow" onclick="nextPicture()" src="/static/images/right_arrow.png">
+                    <div class="circleGroup"></div>
+                </div>
+                <div class="profile">
+                    <div class="profileH2"></div>
+                    <div class="profileP"></div>
+                    <div class="booking_form">
+                        <h2 class="bookingH2">訂購導覽行程</h2>
+                        <p class="bookingP">以此景點為中心的一日行程，帶您探索城市角落故事</p>
+                        <div class="date_field">選擇日期：
+                            <input type="date" class="date">
+                        </div>
+                        <div class="time_field">選擇時間：
+                            <input class="magic-radio check_am" type="radio" name="radio" id="r1" value="option1" onclick="check_am()">
+                            <label for="r1" class="radio1">上半天</label>                                                      
+                            <input class="magic-radio check_pm" type="radio" name="radio" id="r2" value="option2" onclick="check_pm()">
+                            <label for="r2" class="radio2">下半天</label>
+                          </div>
+                        <div class="price_field">導覽費用：<div class="price_fieldText"></div></div>
+                        <div class="booking_btn"><button class="reserveBtn">開始預約行程</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="separatorContainer"><hr class="separator"></div>
+        <!-- infors -->
+        <div class="inforsContainer">
+            <div class="infors">
+                <div class="infors_text"></div>
+                <div class="addressTop">景點地址：</div>
+                <div class="addressText"></div>
+                <div class="trafficTop">交通方式：</div>
+                <div class="trafficText"></div>
+            </div>
+        </div>
+    </div>
+    <!-- footer -->
+    <footer>COPYRIGHT © 2021 台北一日遊</footer>
+    <script src="/static/js/attraction.js"></script>
+</body>
+</html>

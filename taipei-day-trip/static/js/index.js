@@ -68,6 +68,12 @@ fetch(`/api/attractions?page=0`, {
         attractionElement.classList.add('attraction');
         attractionElement.classList.add('product');
 
+        function clickAttraction(){
+            let id = attraction["id"];
+            jumpToAttraction(id);
+        }
+        attractionElement.addEventListener('click', clickAttraction);
+
         // 圖片以及景點名稱的group
         const imageGroup = document.createElement('div');
         imageGroup.classList.add("imagegroup");
@@ -136,6 +142,11 @@ function searchKeywords() {
             const attractionElement = document.createElement('div');
             attractionElement.classList.add('attraction');
             attractionElement.classList.add('product');
+            function clickAttraction(){
+                let id = attraction["id"];
+                jumpToAttraction(id);
+            }
+            attractionElement.addEventListener('click', clickAttraction);
     
             // 圖片以及景點名稱的group
             const imageGroup = document.createElement('div');
@@ -217,7 +228,11 @@ window.addEventListener('scroll', function() {
                             const attractionElement = document.createElement('div');
                             attractionElement.classList.add('attraction');
                             attractionElement.classList.add('product');
-                    
+                            function clickAttraction(){
+                                let id = attraction["id"];
+                                jumpToAttraction(id);
+                            }
+                            attractionElement.addEventListener('click', clickAttraction);
                             // 圖片以及景點名稱的group
                             const imageGroup = document.createElement('div');
                             imageGroup.classList.add("imagegroup");
@@ -265,3 +280,8 @@ window.addEventListener('scroll', function() {
         scrollBottomFlag = false;
     }
 });
+
+
+function jumpToAttraction(id) {
+    window.location.href = "/attraction/" + id;
+}

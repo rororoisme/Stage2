@@ -3,6 +3,7 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: "Noto Sans TC", sans-serif;
 }
 
 div {
@@ -11,6 +12,16 @@ div {
 
 img {
     display: block;
+}
+
+.grayBackGround {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: black;
+    opacity: 0.25;
+    z-index:901;
 }
 
 /********** navigation **********/
@@ -23,7 +34,7 @@ img {
     margin-bottom: 54px;
     background-color: #fff;
     position: fixed;
-    z-index: 999;
+    z-index: 900;
     border-bottom: 1px solid #e8e8e8;
 }
 
@@ -64,6 +75,172 @@ img {
     line-height: 34px;
     font-weight: 700;  
 }
+
+/********** dialog **********/
+.loginContainer {
+    display: none;
+    position: fixed;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+}
+
+.loginBox {
+    position: fixed;
+    width: 340px;
+    background-color: #fff;
+    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    margin-top: 60px;
+    height: 250px;
+    border-radius: 6px 6px 0px 0px;
+    z-index: 999;
+}
+
+.decoraterBar {
+    background: linear-gradient(90deg, #5fc0d9, #489);
+    height: 10px;
+    width: 100%;
+    border-radius: 6px 6px 0px 0px;
+}
+
+.loginText {
+    display: flex;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: #666;
+}
+
+.closeBtn {
+    position: fixed;
+    margin: 30px 0px 0px 280px;
+}
+
+.loginEmail {
+    width: 310px;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0px 15px 10px 15px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: #e8e8e8 solid 1px;
+}
+
+.loginPassword {
+    width: 310px;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0px 15px 10px 15px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: #e8e8e8 solid 1px;
+}
+
+.loginBtn {
+    width: 310px;
+    height: 47px;
+    text-align: center;
+    border-radius: 5px;
+    color:#fff;
+    background-color: #489;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 47px;
+}
+
+.loginAlarm {
+    width: 310px;
+    height: 22px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+}
+
+.signUpContainer {
+    display: none;
+    position: fixed;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+}
+
+.signUpBox {
+    position: fixed;
+    width: 340px;
+    background-color: #fff;
+    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    margin-top: 60px;
+    height: 300px;
+    border-radius: 6px 6px 0px 0px;
+    z-index: 999;
+}
+
+.signUpText {
+    display: flex;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: #666; 
+}
+
+.signUpName {
+    width: 310px;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0px 15px 10px 15px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: #e8e8e8 solid 1px;
+}
+
+.signUpEmail {
+    width: 310px;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0px 15px 10px 15px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: #e8e8e8 solid 1px;
+}
+
+.signUpPassword {
+    width: 310px;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0px 15px 10px 15px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: #e8e8e8 solid 1px;
+}
+
+.signUpBtn {
+    width: 310px;
+    height: 47px;
+    text-align: center;
+    border-radius: 5px;
+    color:#fff;
+    background-color: #489;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 47px;
+}
+
+.signUpAlarm {
+    width: 310px;
+    height: 22px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+}
+
 
 /********** slogan **********/
 .sloganBox {
@@ -381,3 +558,8 @@ footer {
 /* * {
     outline: 1px solid red;
 } */
+
+
+
+
+

@@ -407,7 +407,7 @@ function goSignUp(){
 }
 
 function getStatus(){
-    let token = window.localStorage.getItem('token');
+    let token = window.localStorage.getItem("token");
 
     console.log("call getStatus, token = " + token);
 

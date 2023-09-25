@@ -22,8 +22,10 @@ img {
     position: fixed;
     background: black;
     opacity: 0.25;
-    z-index:901;
+    z-index: 901;
+    top: 0;
 }
+
 /********** navigation **********/
 .navigation {
     display: flex;
@@ -35,7 +37,7 @@ img {
     background-color: #fff;
     position: fixed;
     top: 0;
-    z-index: 999;
+    z-index: 900;
     border-bottom: 1px solid #e8e8e8;
 }
 

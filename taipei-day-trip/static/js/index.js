@@ -285,3 +285,166 @@ window.addEventListener('scroll', function() {
 function jumpToAttraction(id) {
     window.location.href = "/attraction/" + id;
 }
+
+// Login
+function closeLoginBox(){
+    let loginContainer = document.querySelector(".loginContainer");
+    let loginBox = document.querySelector(".loginBox")
+    let grayBackGround = document.querySelector(".grayBackGround")
+    loginContainer.style.display = "none";
+    loginBox.style.display = "none";
+    grayBackGround.style.display = "none";
+}
+
+
+function login(){
+    let loginEmail = document.querySelector(".loginEmail").value
+    let loginPassword = document.querySelector(".loginPassword").value
+    let userData = {
+        email: loginEmail,
+        password: loginPassword
+    };
+    
+    if (loginEmail == "" || loginPassword == ""){
+        console.log("stop!")
+        return
+    }
+
+    fetch(`/api/user/auth`,{
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body:JSON.stringify(userData)
+    }).then(function(response){
+        return response.json();
+    }).then(function(data){
+        console.log("登入成功!")
+        window.localStorage.setItem("token", data["token"]);
+        // 連線目標網址 = 當前網址
+        window.location.href = window.location.pathname ;
+    })
+}
+
+function goLogin(){
+    let loginContainer = document.querySelector(".loginContainer");
+    let loginBox = document.querySelector(".loginBox");
+    let signUpContainer = document.querySelector(".signUpContainer");
+    let signUpBox = document.querySelector(".signUpBox")
+    let grayBackGround = document.querySelector(".grayBackGround")
+    loginContainer.style.display = "flex";
+    loginBox.style.display = "flex";
+    signUpContainer.style.display = "none";
+    signUpBox.style.display = "none";
+    grayBackGround.style.display = "flex";
+}
+
+
+
+// SignUp
+function closeSignUpBox(){
+    let signUpContainer = document.querySelector(".signUpContainer");
+    let signUpBox = document.querySelector(".signUpBox")
+    let grayBackGround = document.querySelector(".grayBackGround")
+    signUpContainer.style.display = "none";
+    signUpBox.style.display = "none";
+    grayBackGround.style.display = "none";
+}
+
+let SignUpLoading = false;
+function signUp(){
+    let signUpName = document.querySelector(".signUpName").value.trim()
+    let signUpEmail = document.querySelector(".signUpEmail").value.trim()
+    let signUpPassword = document.querySelector(".signUpPassword").value.trim()
+
+    if (signUpName == "" || signUpEmail == "" || signUpPassword == ""){      
+        console.log("stop!")
+        return
+    }
+
+    if (!SignUpLoading) {
+        SignUpLoading  = true;
+        let userData = {
+            name: signUpName,
+            email: signUpEmail,
+            password: signUpPassword
+        }
+        fetch(`/api/user`,{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userData) 
+
+        }).then(function(response) {
+            return response.json();
+        }).then(function(data){
+            SignUpLoading = false;
+            console.log(data)
+            let signUpAlarm = document.querySelector(".signUpAlarm");
+            if (data.ok == true) {
+                signUpAlarm.innerHTML = "註冊成功！點此登入"
+            } else if (data.error == true) {
+                signUpAlarm.innerHTML = "該Email已被註冊，點此登入"
+            }
+        })
+    }
+}
+
+
+function goSignUp(){
+    console.log("Call goSignUp")
+    let loginContainer = document.querySelector(".loginContainer");
+    let loginBox = document.querySelector(".loginBox");
+    let signUpContainer = document.querySelector(".signUpContainer");
+    let signUpBox = document.querySelector(".signUpBox")
+    let grayBackGround = document.querySelector(".grayBackGround")
+    signUpContainer.style.display = "flex";
+    signUpBox.style.display = "flex";
+    loginContainer.style.display = "none";
+    loginBox.style.display = "none";
+    grayBackGround.style.display = "flex";
+}
+
+function getStatus(){
+    let token = window.localStorage.getItem("token");
+
+    console.log("call getStatus, token = " + token);
+
+    // token丟進來確認一次內容, 以防token過期或是假token
+    fetch(`/api/user/auth`,{
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "bearer " + token
+        }
+    }).then(function(response){
+        return response.json();
+    }).then(function(data){
+        let userdata = data["data"]
+        console.log(data)
+        let loginElem = document.querySelector(".BtnRight");
+        if (userdata) { 
+            console.log("Has login")
+            loginElem.textContent = "登出"
+            loginElem.addEventListener('click', logout);
+            loginElem.removeEventListener('click', goLogin);
+        } else { 
+            console.log("Not login yet")
+            loginElem.textContent = "登入/註冊"
+            loginElem.addEventListener('click', goLogin);
+            loginElem.removeEventListener('click', logout);
+        }
+    })
+}
+
+function logout(){
+    console.log("Call logout")
+    window.localStorage.setItem("token","");
+    // 連線目標網址 = 當前網址
+    window.location.href = window.location.pathname;
+}
+
+
+
+getStatus();

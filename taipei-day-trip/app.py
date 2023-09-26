@@ -1,6 +1,9 @@
 from flask import *
 import json
 import mysql.connector
+import jwt
+import datetime
+
 
 app=Flask(__name__)
 app.config["JSON_AS_ASCII"]=False
@@ -33,7 +36,144 @@ def booking():
 def thankyou():
 	return render_template("thankyou.html")
 
+# 註冊一個新的會員 /api/user (POST)
+@app.route("/api/user", methods=["POST"])
+def signup():
+    try:
+        data = request.get_json()
+        username = data.get("name")
+        email = data.get("email")
+        password = data.get("password")
 
+        con = get_conn()
+        cursor = con.cursor()
+        cursor.execute("SELECT * FROM MEMBERS WHERE EMAIL = %s",(email,))
+        result = cursor.fetchall()
+
+        #print(result)
+        if len(result) <1:
+            cursor.execute("INSERT INTO MEMBERS(NAME, EMAIL, PASSWORD) VALUES(%s, %s, %s)", (username, email, password))
+            con.commit()
+            cursor.close()
+            con.close()
+            return jsonify({
+                "ok": True,
+            }), 200
+        
+        else:
+            cursor.close()
+            con.close()
+            return jsonify({
+                "error": True,
+                "message": "註冊失敗，重複的Email或其他原因"
+            }), 400
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return jsonify({
+            "error": True,
+            "message": str(e)
+        }), 500
+    
+    finally:
+        cursor.close()
+        con.close()
+
+
+# 取得當前當入的會員資訊 /api/user/auth (GET)
+@app.route("/api/user/auth", methods=["GET"])
+def checkUserStatus():
+    authorizationHeaders = request.headers.get("Authorization")
+    # "bearer " + token字串
+
+    try:
+        if authorizationHeaders is None or  len(authorizationHeaders.split(" ")) < 2:
+            return jsonify({
+                "data": None
+            }), 200
+
+        token = authorizationHeaders.split(" ")[1]
+        if token is None or token == "":
+            return jsonify({
+                "data": None
+            }), 200
+        
+        payload = jwt.decode(token, "secret", algorithms="HS256")
+        print(payload)
+
+        email = payload["email"]
+        con = get_conn()
+        cursor = con.cursor()
+        cursor.execute("SELECT * FROM MEMBERS WHERE EMAIL = %s",(email,))
+        user_data = cursor.fetchone()
+        print(user_data)
+       
+        # 拿取Token中的過期時間
+        token_exp = payload.get("exp")
+        current_time =  datetime.datetime.utcnow()
+
+        if token_exp is not None and current_time > datetime.datetime.fromtimestamp(token_exp):
+            return jsonify({
+                "message": "Token已過期"
+            }), 401
+        
+        else: 
+            userDataDict = {
+                "id": user_data[0],
+                "name": user_data[1],
+                "email": user_data[2]
+            }
+            return jsonify({
+                "data": userDataDict
+            }), 200
+    
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return jsonify({
+            "error": True,
+            "message": str(e)
+        }), 500
+
+
+# 登入會員帳戶 /api/user/auth (PUT)
+@app.route("/api/user/auth", methods=["PUT"])
+def login():
+    try:
+        data = request.get_json()
+        print(data)
+        email = data.get('email')
+        password = data.get('password')
+
+        con = get_conn()
+        cursor = con.cursor()
+        cursor.execute("SELECT * FROM MEMBERS WHERE EMAIL = %s AND PASSWORD = %s",(email, password))
+        result = cursor.fetchall()
+        print(result)
+        
+        if len(result)> 0:
+            # 設定JWT的有效期限
+            expiration_time = datetime.datetime.utcnow() + datetime.timedelta(days=7)
+            # 生成JWT Token
+            token = jwt.encode({"email": email, "exp": expiration_time}, "secret", algorithm="HS256")
+
+            return jsonify({
+                "token": token,
+            }), 200
+        
+        else:
+            return jsonify({
+                "error": True,
+                "message": "登入失敗，帳號或密碼錯誤或其他原因"
+            }), 400
+    except Exception as e:
+        return jsonify ({
+            "error": True,
+            "message": str(e)
+        }), 500
+    
+    finally:
+        cursor.close()
+        con.close()
 
 # 取得景點資料列表 /api/attractions (GET)
 @app.route("/api/attractions")

@@ -445,6 +445,11 @@ function logout(){
     window.location.href = window.location.pathname;
 }
 
+function goBooking(){
+    window.location.href = "/booking";
+}
+
+
 
 
 getStatus();

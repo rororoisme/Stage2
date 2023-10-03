@@ -8,6 +8,8 @@ const attractionId = arr[arr.length-1];
 
 let attractionImages = [];
 let currentImageIndex = 0;
+let bookingTime = "";
+let bookingPrice = 0;
 
 // 展示景點資訊
 fetch(`/api/attraction/${attractionId}`, {
@@ -53,11 +55,15 @@ fetch(`/api/attraction/${attractionId}`, {
 
 // 時段收費
 function check_am() {
+    bookingTime = "morning"
+    bookingPrice = 2000
     const price_field = document.querySelector('.price_fieldText');
     price_field.textContent = "新台幣 2000 元";
 }
 
 function check_pm() {
+    bookingTime = "afternoon"
+    bookingPrice = 2500
     const price_field = document.querySelector('.price_fieldText');
     price_field.textContent = "新台幣 2500 元";
 }
@@ -142,6 +148,12 @@ function closeLoginBox(){
     grayBackGround.style.display = "none";
 }
 
+function logout(){
+    console.log("Call logout")
+    window.localStorage.setItem("token","");
+    // 連線目標網址 = 當前網址
+    window.location.href = window.location.pathname;
+}
 
 function login(){
     let loginEmail = document.querySelector(".loginEmail").value
@@ -247,6 +259,8 @@ function goSignUp(){
     grayBackGround.style.display = "flex";
 }
 
+
+
 function getStatus(){
     let token = window.localStorage.getItem('token');
 
@@ -279,13 +293,76 @@ function getStatus(){
     })
 }
 
-function logout(){
-    console.log("Call logout")
-    window.localStorage.setItem("token","");
-    // 連線目標網址 = 當前網址
-    window.location.href = window.location.pathname;
+
+
+
+function goBooking(){
+    window.location.href = "/booking";
 }
 
 
+function bookingPost() {
+    console.log("bookingPost is called");
+    let token = window.localStorage.getItem("token");
+    let url = window.location.href;
+    let attractionIdSplit = url.split("/");
+    let attractionIdValue = attractionIdSplit[attractionIdSplit.length -1]
+    let date = document.querySelector(".date").value
+    console.log(date);
+    console.log(token);
+    if (token == "" || token == undefined ) {
+        goLogin();
+        return;
+    }
+
+
+    if (date == "") {
+        alert("請選擇預約日期");
+        return;
+    }
+
+    const today = new Date();
+    const targetDate = new Date(date);
+    if (targetDate < today) {
+        alert("請選擇往後日期");
+        return;
+    }
+
+    if (bookingTime == "") {
+        alert("請選擇預定時間");
+        return;
+    }
+
+    let bookingData = {
+        "attractionId": attractionIdValue,
+        "date": date,
+        "time": bookingTime,
+        "price": bookingPrice
+    };
+
+    fetch(`/api/booking`,{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "bearer " + token
+        },
+        body:JSON.stringify(bookingData)
+        
+    }).then(function(response){
+        if (response.status === 403) {
+      
+            goLogin();
+            // 跳過其中幾筆then到最後的catch Error階段, return還是會跑
+            throw new Error("未登入");
+        } 
+        
+        return response.json();
+    }).then(function(data){
+        window.location.href = "/booking";
+    }).catch(function(error) {
+        console.log("儲存行程出問題");
+        console.log(error);
+    });
+}
 
 getStatus();

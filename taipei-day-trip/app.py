@@ -2,6 +2,7 @@ from flask import *
 import json
 import mysql.connector
 import jwt
+import traceback
 import datetime
 
 
@@ -398,6 +399,260 @@ def get_mrts():
     except Exception as e:
         print(str(e))
         return {"error": True, "message": "伺服器內部錯誤"}, 500
+    
 
+@app.route("/api/booking", methods=["POST"])
+def bookingPost():
+    authorizationHeaders = request.headers.get("Authorization")
+
+    try:
+        if authorizationHeaders is None or  len(authorizationHeaders.split(" ")) < 2:
+            return jsonify({
+                "error": True,
+                "message": "未登入"
+            }), 403
+
+        token = authorizationHeaders.split(" ")[1]
+        if token is None or token == "":
+            return jsonify({
+                "error": True,
+                "message": "未登入"
+            }), 403
+        print(authorizationHeaders)
+        payload = jwt.decode(token, "secret", algorithms="HS256")
+        print(payload)
+
+        email = payload["email"]
+        con = get_conn()
+        cursor = con.cursor()
+        cursor.execute("SELECT * FROM MEMBERS WHERE EMAIL = %s",(email,))
+        user_data = cursor.fetchone()
+        print(user_data)
+       
+        # 拿取Token中的過期時間
+        token_exp = payload.get("exp")
+        current_time =  datetime.datetime.utcnow()
+
+        if token_exp is not None and current_time > datetime.datetime.fromtimestamp(token_exp):
+            return jsonify({
+                "error": True,
+                "message": "Token已過期"
+            }), 403
+        
+        else: 
+            # 登入成功，新增訂單
+            data = request.get_json()
+            date_string = data.get("date")
+
+            # 將日期字符串轉換為日期對象
+            date_obj = datetime.datetime.strptime(date_string, "%Y-%m-%d")
+
+            # 取得今天的日期
+            today = datetime.datetime.today()
+
+            # 比較日期
+            if date_obj < today:
+                return jsonify({
+                    "error": True,
+                    "message": "預約日期已過"
+                }), 400
+            else:
+                # 檢查資料庫是否有預約資料
+                con = get_conn()
+                cursor = con.cursor()
+                cursor.execute("SELECT * FROM BOOKING WHERE EMAIL = %s", (email,))
+                bookingResultList = cursor.fetchall()
+                cursor.close()
+                con.close()
+                
+                if len(bookingResultList) < 1 :
+                    con = get_conn()
+                    cursor = con.cursor()
+                    cursor.execute("INSERT INTO BOOKING(EMAIL, ATTRACTIONID, DATE, TIME, PRICE) VALUES(%s, %s, %s, %s, %s)"
+                                , (email, data.get("attractionId"), data.get("date"), data.get("time"), data.get("price")))
+                    con.commit()
+                    cursor.close()
+                    con.close()
+                else :
+                    con = get_conn()
+                    cursor = con.cursor()
+                    cursor.execute("UPDATE  BOOKING  SET ATTRACTIONID=%s, DATE=%s, TIME=%s, PRICE=%s WHERE EMAIL = %s"
+                                , (data.get("attractionId"), data.get("date"), data.get("time"), data.get("price"), email))
+                    con.commit()
+                    cursor.close()
+                    con.close()
+                
+                return jsonify({
+                    "ok": True,
+                }), 200
+    
+    except Exception as e:
+        error_info = traceback.format_exc()
+        print(f"An error occurred: {error_info}")
+        return jsonify({
+            "error": True,
+            "message": str(e)
+        }), 500
+
+
+@app.route("/api/booking", methods=["DELETE"])
+def bookingDelete():
+    authorizationHeaders = request.headers.get("Authorization")
+
+    try:
+        if authorizationHeaders is None or  len(authorizationHeaders.split(" ")) < 2:
+            return jsonify({
+                "error": True,
+                "message": "未登入"
+            }), 403
+
+        token = authorizationHeaders.split(" ")[1]
+        if token is None or token == "":
+            return jsonify({
+                "error": True,
+                "message": "未登入"
+            }), 403
+        
+        payload = jwt.decode(token, "secret", algorithms="HS256")
+        print(payload)
+
+        email = payload["email"]
+        con = get_conn()
+        cursor = con.cursor()
+        cursor.execute("SELECT * FROM MEMBERS WHERE EMAIL = %s",(email,))
+        user_data = cursor.fetchone()
+        print(user_data)
+       
+        # 拿取Token中的過期時間
+        token_exp = payload.get("exp")
+        current_time =  datetime.datetime.utcnow()
+
+        if token_exp is not None and current_time > datetime.datetime.fromtimestamp(token_exp):
+            return jsonify({
+                "error": True,
+                "message": "Token已過期"
+            }), 403
+        
+        else: 
+            con = get_conn()
+            cursor = con.cursor()
+            cursor.execute("DELETE FROM BOOKING WHERE EMAIL = %s", (email,))
+            con.commit()
+            cursor.close()
+            con.close()
+            return jsonify({
+                "ok": True,
+            }), 200
+    
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return jsonify({
+            "error": True,
+            "message": str(e)
+        }), 500
+    
+
+
+@app.route("/api/booking", methods=["GET"])
+def bookingGet():
+    authorizationHeaders = request.headers.get("Authorization")
+
+    try:
+        if authorizationHeaders is None or  len(authorizationHeaders.split(" ")) < 2:
+            return jsonify({
+                "error": True,
+                "message": "未登入"
+            }), 403
+
+        token = authorizationHeaders.split(" ")[1]
+        if token is None or token == "":
+            return jsonify({
+                "error": True,
+                "message": "未登入"
+            }), 403
+        
+        payload = jwt.decode(token, "secret", algorithms="HS256")
+        print(payload)
+
+        email = payload["email"]
+        con = get_conn()
+        cursor = con.cursor()
+        cursor.execute("SELECT * FROM MEMBERS WHERE EMAIL = %s",(email,))
+        user_data = cursor.fetchone()
+        print(user_data)
+       
+        # 拿取Token中的過期時間
+        token_exp = payload.get("exp")
+        current_time =  datetime.datetime.utcnow()
+
+        if token_exp is not None and current_time > datetime.datetime.fromtimestamp(token_exp):
+            return jsonify({
+                "error": True,
+                "message": "Token已過期"
+            }), 403
+        
+        else: 
+            con = get_conn()
+            cursor = con.cursor()
+            cursor.execute("SELECT * FROM BOOKING WHERE EMAIL = %s", (email,))
+            bookingResultList = cursor.fetchall()
+            cursor.close()
+            con.close()
+            
+            if len(bookingResultList) < 1 :
+                # 沒有訂單
+                return jsonify({
+                "data": None
+                }), 200
+            else :
+                # 有訂單    ID,EMAIL, ATTRACTIONID, DATE, TIME, PRICE
+                bookingResultTuple = bookingResultList[0]
+                attractionID = bookingResultTuple[2]
+                date = bookingResultTuple[3]
+                time = bookingResultTuple[4]
+                price = bookingResultTuple[5]
+
+                print("bookingResultTuple = " + str(bookingResultTuple))
+                con = get_conn()
+                cursor = con.cursor()
+                cursor.execute("SELECT name, address, file FROM taipei WHERE _id = %s", (attractionID,))
+                attractionResultList = cursor.fetchall()
+                print("attractionResultList = " + str(attractionResultList))
+                attractionResultTuple = attractionResultList[0]
+                cursor.close()
+                con.close()
+
+                name = attractionResultTuple[0]
+                address = attractionResultTuple[1]
+                imageStr = attractionResultTuple[2]
+            
+                imgList = imageStr.split("http")
+                print("imgList = " + str(imgList))
+                image = "http" + imgList[1]
+                
+                return jsonify({
+                    "data": {
+                        "attraction": {
+                            "id": attractionID,
+                            "name": name,
+                            "address": address,
+                            "image": image
+                        },
+                        "date": date,
+                        "time": time,
+                        "price": price
+                    }
+                }), 200
+    
+    except Exception as e:
+        error_info = traceback.format_exc()
+        print(f"An error occurred: {error_info}")
+        return jsonify({
+            "error": True,
+            "message": str(e)
+        }), 500
+    
 
 app.run(host="0.0.0.0", port=3000)
+
+

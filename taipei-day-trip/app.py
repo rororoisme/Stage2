@@ -615,7 +615,7 @@ def bookingGet():
                 print("bookingResultTuple = " + str(bookingResultTuple))
                 con = get_conn()
                 cursor = con.cursor()
-                cursor.execute("SELECT name, address, file FROM TAIPEI WHERE _id = %s", (attractionID,))
+                cursor.execute("SELECT name, address, file FROM taipei WHERE _id = %s", (attractionID,))
                 attractionResultList = cursor.fetchall()
                 print("attractionResultList = " + str(attractionResultList))
                 attractionResultTuple = attractionResultList[0]

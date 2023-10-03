@@ -48,7 +48,7 @@ def signup():
 
         con = get_conn()
         cursor = con.cursor()
-        cursor.execute("SELECT * FROM members WHERE EMAIL = %s",(email,))
+        cursor.execute("SELECT * FROM MEMBERS WHERE EMAIL = %s",(email,))
         result = cursor.fetchall()
 
         #print(result)
@@ -105,7 +105,7 @@ def checkUserStatus():
         email = payload["email"]
         con = get_conn()
         cursor = con.cursor()
-        cursor.execute("SELECT * FROM members WHERE EMAIL = %s",(email,))
+        cursor.execute("SELECT * FROM MEMBERS WHERE EMAIL = %s",(email,))
         user_data = cursor.fetchone()
         print(user_data)
        
@@ -147,7 +147,7 @@ def login():
 
         con = get_conn()
         cursor = con.cursor()
-        cursor.execute("SELECT * FROM members WHERE EMAIL = %s AND PASSWORD = %s",(email, password))
+        cursor.execute("SELECT * FROM MEMBERS WHERE EMAIL = %s AND PASSWORD = %s",(email, password))
         result = cursor.fetchall()
         print(result)
         
@@ -425,7 +425,7 @@ def bookingPost():
         email = payload["email"]
         con = get_conn()
         cursor = con.cursor()
-        cursor.execute("SELECT * FROM members WHERE EMAIL = %s",(email,))
+        cursor.execute("SELECT * FROM MEMBERS WHERE EMAIL = %s",(email,))
         user_data = cursor.fetchone()
         print(user_data)
        
@@ -460,7 +460,7 @@ def bookingPost():
                 # 檢查資料庫是否有預約資料
                 con = get_conn()
                 cursor = con.cursor()
-                cursor.execute("SELECT * FROM booking WHERE EMAIL = %s", (email,))
+                cursor.execute("SELECT * FROM BOOKING WHERE EMAIL = %s", (email,))
                 bookingResultList = cursor.fetchall()
                 cursor.close()
                 con.close()
@@ -519,7 +519,7 @@ def bookingDelete():
         email = payload["email"]
         con = get_conn()
         cursor = con.cursor()
-        cursor.execute("SELECT * FROM members WHERE EMAIL = %s",(email,))
+        cursor.execute("SELECT * FROM MEMBERS WHERE EMAIL = %s",(email,))
         user_data = cursor.fetchone()
         print(user_data)
        
@@ -536,7 +536,7 @@ def bookingDelete():
         else: 
             con = get_conn()
             cursor = con.cursor()
-            cursor.execute("DELETE FROM booking WHERE EMAIL = %s", (email,))
+            cursor.execute("DELETE FROM BOOKING WHERE EMAIL = %s", (email,))
             con.commit()
             cursor.close()
             con.close()
@@ -577,7 +577,7 @@ def bookingGet():
         email = payload["email"]
         con = get_conn()
         cursor = con.cursor()
-        cursor.execute("SELECT * FROM members WHERE EMAIL = %s",(email,))
+        cursor.execute("SELECT * FROM MEMBERS WHERE EMAIL = %s",(email,))
         user_data = cursor.fetchone()
         print(user_data)
        
@@ -594,7 +594,7 @@ def bookingGet():
         else: 
             con = get_conn()
             cursor = con.cursor()
-            cursor.execute("SELECT * FROM booking WHERE EMAIL = %s", (email,))
+            cursor.execute("SELECT * FROM BOOKING WHERE EMAIL = %s", (email,))
             bookingResultList = cursor.fetchall()
             cursor.close()
             con.close()
@@ -615,7 +615,7 @@ def bookingGet():
                 print("bookingResultTuple = " + str(bookingResultTuple))
                 con = get_conn()
                 cursor = con.cursor()
-                cursor.execute("SELECT name, address, file FROM taipei WHERE _id = %s", (attractionID,))
+                cursor.execute("SELECT name, address, file FROM TAIPEI WHERE _id = %s", (attractionID,))
                 attractionResultList = cursor.fetchall()
                 print("attractionResultList = " + str(attractionResultList))
                 attractionResultTuple = attractionResultList[0]

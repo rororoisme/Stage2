@@ -117,8 +117,6 @@
         </div>
       </div>
 
-      <!-- <div class="separatorContainer"><hr class="separator" /></div> -->
-
       <!-- 區塊 2-->
       <div class="contactForm">
         <div class="contactTitle">您的聯絡資訊</div>
@@ -135,30 +133,24 @@
           請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。
         </div>
       </div>
-      <!-- <div class="separatorContainer"><hr class="separator" /></div> -->
 
       <!-- 區塊 3-->
       <div class="paymentBox">
         <div class="paymentTitle">信用卡付費資訊</div>
         <div class="paymentText">
-          卡片號碼：<input
-            type="password"
-            class="paymentPassword"
-            placeholder="**** **** **** ****"
-          />
+          卡片號碼：
+          <div id="cardNumberInput" class="paymentPassword"></div>
         </div>
         <div class="paymentText">
-          過期時間：<input
-            type="text"
-            class="paymentDate"
-            placeholder="MM / YY"
-          />
+          過期時間：
+          <div id="cardExpireInput" class="paymentDate"></div>
         </div>
         <div class="paymentText">
-          驗證密碼：<input type="text" class="paymentCVV" placeholder="CVV" />
+          驗證密碼：
+          <div id="cardCVVInput" class="paymentCVV"></div>
         </div>
       </div>
-      <!-- <div class="separatorContainer"><hr class="separator" /></div> -->
+
       <!-- 區塊 4-->
       <div class="confirm">
         <div class="totalprice">總價：</div>
@@ -168,6 +160,7 @@
 
     <!-- footer -->
     <footer>COPYRIGHT © 2021 台北一日遊</footer>
+    <script src="https://js.tappaysdk.com/sdk/tpdirect/v5.14.0"></script>
     <script src="/static/js/booking.js"></script>
   </body>
 </html>

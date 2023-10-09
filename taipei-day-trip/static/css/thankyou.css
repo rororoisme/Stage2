@@ -1,0 +1,365 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Noto Sans TC", sans-serif;
+    box-sizing: border-box;
+}
+
+div {
+    margin: 0;
+}
+
+img {
+    display: block;
+}
+
+.grayBackGround {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: black;
+    opacity: 0.25;
+    z-index: 901;
+}
+
+/********** navigation **********/
+.navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 54px;
+    background-color: #fff;
+    position: fixed;
+    z-index: 900;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.navigationBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 1200px;
+    height: 34px;
+    background-color: #fff;
+}
+
+.frame2 {
+    display: flex;
+    justify-content: end;
+}
+
+.frame1 {
+    display: flex;
+}
+
+.navigationBtn {
+    font-family: "Noto Sans TC", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 13.3px;
+    padding: 10px;
+    border-width: 0;
+    background-color: #fff;
+    color: #666
+}
+
+.navigationText {
+    color: #489;
+    font-family: "Noto Sans TC", sans-serif;
+    font-size: 30px;
+    font-style: normal;
+    line-height: 34px;
+    font-weight: 700;  
+}
+
+/********** dialog **********/
+.loginContainer {
+    display: none;
+    position: fixed;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+}
+
+.loginBox {
+    position: fixed;
+    width: 340px;
+    background-color: #fff;
+    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    margin-top: 60px;
+    height: 250px;
+    border-radius: 6px 6px 0px 0px;
+    z-index: 999;
+}
+
+.decoraterBar {
+    background: linear-gradient(90deg, #5fc0d9, #489);
+    height: 10px;
+    width: 100%;
+    border-radius: 6px 6px 0px 0px;
+}
+
+.loginText {
+    display: flex;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: #666;
+}
+
+.closeBtn {
+    position: fixed;
+    margin: 30px 0px 0px 280px;
+}
+
+.loginEmail {
+    width: 310px;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0px 15px 10px 15px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: #e8e8e8 solid 1px;
+}
+
+.loginPassword {
+    width: 310px;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0px 15px 10px 15px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: #e8e8e8 solid 1px;
+}
+
+.loginBtn {
+    width: 310px;
+    height: 47px;
+    text-align: center;
+    border-radius: 5px;
+    color:#fff;
+    background-color: #489;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 47px;
+}
+
+.loginAlarm {
+    width: 310px;
+    height: 22px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+}
+
+.signUpContainer {
+    display: none;
+    position: fixed;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+}
+
+.signUpBox {
+    position: fixed;
+    width: 340px;
+    background-color: #fff;
+    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    margin-top: 60px;
+    height: 300px;
+    border-radius: 6px 6px 0px 0px;
+    z-index: 999;
+}
+
+.signUpText {
+    display: flex;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: #666; 
+}
+
+.signUpName {
+    width: 310px;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0px 15px 10px 15px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: #e8e8e8 solid 1px;
+}
+
+.signUpEmail {
+    width: 310px;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0px 15px 10px 15px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: #e8e8e8 solid 1px;
+}
+
+.signUpPassword {
+    width: 310px;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0px 15px 10px 15px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: #e8e8e8 solid 1px;
+}
+
+.signUpBtn {
+    width: 310px;
+    height: 47px;
+    text-align: center;
+    border-radius: 5px;
+    color:#fff;
+    background-color: #489;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 47px;
+}
+
+.signUpAlarm {
+    width: 310px;
+    height: 22px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+}
+
+
+/********** main **********/
+.mainBox {
+    /* width: 1200px; */
+    padding-top: 54px;
+    color: #666;
+    /* margin: 0px auto; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.mainSection {
+    width: 1200px;
+    padding: 40px;
+    padding-left: 110px; 
+}
+
+
+.mainHeadline {
+    color: #666;
+    display: flex;
+    /* width: 1000px; */
+    height: 27px;
+    font-size: 19px;
+    font-weight: 700;
+    /* position: relative;
+    top: 100px;
+    left: 0;
+     */
+}
+.orderNumber {
+    margin: 30px 0px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.noBookingText {
+    margin-top: 30px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+
+/********** footer **********/
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: normal;
+    font-family: "Noto Sans TC", sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    background-color: #757575;
+    color: #fff;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    line-height: 5;
+}
+
+/* LastCheck */
+.mainSection,.contactForm,.paymentBox,.confirm{
+    border-bottom:1px solid #e8e8e8;
+    width: 1200px;
+    padding: 40px;
+    padding-left: 110px; 
+}
+
+@media (max-width: 1200px){
+    .navigation {
+        width: 100%;
+    }
+
+    .deleteBtn {
+        left: 200px;
+    }
+
+    .mainSection,.contactForm,.paymentBox,.confirm {
+        border-bottom:1px solid #e8e8e8;
+        width: 100%;
+        padding: 40px;
+        padding-left: 110px; 
+    }
+    
+
+}
+
+@media (max-width: 800px) {
+    .mainSection,.contactForm,.paymentBox,.confirm{
+        width: 100%;
+        padding: 60px 20px;
+    }
+    
+    .sectionBox {
+        height: 400px;
+        display: block;
+        /* margin: 130px 0px 70px 0px; */
+    }
+
+    .sectionImage {
+        width: 340px;
+        height: 250px;
+    }
+
+    .sectionTextBox {
+        margin-left: 0;
+    }
+
+    .sectionTitleBox {
+        margin-top: 10px;
+    }
+    .deleteBtn {
+        left: 130px;
+        top: 140px;
+    }
+}
+
+
+/* * {
+    outline: 1px solid red;
+} */

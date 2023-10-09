@@ -4,6 +4,8 @@ import mysql.connector
 import jwt
 import traceback
 import datetime
+import requests
+
 
 
 app=Flask(__name__)
@@ -22,6 +24,153 @@ def get_conn():
     )
     return db_connection
 
+
+def pay(price, prime, phone, name, email):
+    tap_pay_key = "partner_83S14Lwzh6bCg9OoNZ466VBmRmjs9NdHBa1hAobFGBqzMycedqspTHmk"
+    my_mechant_id = "rororoisme_CTBC"
+
+    headers = {
+		"Content-Type": "application/json",
+		"x-api-key": tap_pay_key
+	}
+
+    payload = {
+		"prime": prime,
+		"partner_key": tap_pay_key,
+		"merchant_id": my_mechant_id,
+		"details":"Taipei-day-trip TapPayTest",
+		"amount": price,
+		"cardholder": {
+			"phone_number": phone,
+			"name": name,
+			"email": email
+		},
+		"remember": True
+	}
+
+
+    response =  requests.post("https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime",
+                          json = payload, 
+                          headers = headers)
+    print("pay result = " )
+    # response的body要用text去取
+    print(response.text)
+    return response.json()
+
+
+@app.route("/api/orders", methods=["POST"])
+def payByPrime():
+    
+    data = request.get_json()
+    print(data)
+    authorizationHeaders = request.headers.get("Authorization")
+    if authorizationHeaders is None or  len(authorizationHeaders.split(" ")) < 2:
+        return jsonify({
+            "error": True,
+            "message": "未登入"
+        }), 403
+
+    token = authorizationHeaders.split(" ")[1]
+    if token is None or token == "":
+        return jsonify({
+            "error": True,
+            "message": "未登入"
+        }), 403
+    
+    payload = jwt.decode(token, "secret", algorithms="HS256")
+    # print(payload)
+
+    email = payload["email"]
+    con = get_conn()
+    cursor = con.cursor()
+    cursor.execute("SELECT * FROM MEMBERS WHERE EMAIL = %s",(email,))
+    user_data = cursor.fetchone()
+    # print(user_data)
+    
+    # 拿取Token中的過期時間
+    token_exp = payload.get("exp")
+    current_time =  datetime.datetime.utcnow()
+
+    if token_exp is not None and current_time > datetime.datetime.fromtimestamp(token_exp):
+        return jsonify({
+            "error": True,
+            "message": "Token已過期"
+        }), 403
+
+    try :
+        # 訂單編號用時間
+        current_datetime = datetime.datetime.now()
+        formatted_datetime = current_datetime.strftime("%Y%m%d%H%M%S")
+        order_number = formatted_datetime
+        price = data["order"]["price"]
+        attraction_id = data["order"]["trip"]["attraction"]["id"]
+        attraction_name = data["order"]["trip"]["attraction"]["name"]
+        attraction_address = data["order"]["trip"]["attraction"]["address"]
+        attraction_image = data["order"]["trip"]["attraction"]["image"]
+        trip_date = data["order"]["trip"]["date"]
+        trip_time = data["order"]["trip"]["time"]
+        contact_name = data["order"]["contact"]["name"]
+        contact_email = data["order"]["contact"]["email"]
+        contact_phone = data["order"]["contact"]["phone"]
+        status = -1
+
+        con = get_conn()
+        cursor = con.cursor()
+        sql = "INSERT INTO orders (order_number, order_price, attraction_id, attraction_name, attraction_address, attraction_image, trip_date, trip_time, contact_name, contact_email, contact_phone, order_status) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        values = (order_number, price, attraction_id, attraction_name, attraction_address, attraction_image, trip_date, trip_time, contact_name, contact_email, contact_phone, status)
+        cursor.execute(sql, values)
+        con.commit()
+        cursor.close()
+        con.close()
+        
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return jsonify({
+            "error": True,
+            "message": str(e)
+        }), 400
+
+    try:
+        responseJson = pay(price, data['prime'], contact_phone,contact_name, contact_email)
+        if responseJson['status'] == 0:
+            con = get_conn()
+            cursor = con.cursor()
+            update_sql = "UPDATE orders SET order_status = %s WHERE order_number = %s"
+            update_values = (0, order_number)
+            cursor.execute("DELETE FROM BOOKING WHERE EMAIL = %s", (email,))
+            cursor.execute(update_sql, update_values)
+            con.commit()
+            cursor.close()
+            con.close()
+            
+
+            return jsonify(    
+                {
+                    "data": {
+                        "number": order_number,
+                        "payment": {
+                        "status": 0,
+                        "message": "付款成功"
+                        }
+                    }
+                }), 200
+        else:
+            return jsonify(    
+                {
+                    "data": {
+                        "number": order_number,
+                        "payment": {
+                        "status": -1,
+                        "message": "付款失敗"
+                        }
+                    }
+                }), 200
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return jsonify({
+            "error": True,
+            "message": str(e)
+        }), 500
 
 # Pages
 @app.route("/")
@@ -100,14 +249,14 @@ def checkUserStatus():
             }), 200
         
         payload = jwt.decode(token, "secret", algorithms="HS256")
-        print(payload)
+        # print(payload)
 
         email = payload["email"]
         con = get_conn()
         cursor = con.cursor()
         cursor.execute("SELECT * FROM MEMBERS WHERE EMAIL = %s",(email,))
         user_data = cursor.fetchone()
-        print(user_data)
+        # print(user_data)
        
         # 拿取Token中的過期時間
         token_exp = payload.get("exp")
@@ -141,7 +290,7 @@ def checkUserStatus():
 def login():
     try:
         data = request.get_json()
-        print(data)
+        # print(data)
         email = data.get('email')
         password = data.get('password')
 
@@ -149,7 +298,7 @@ def login():
         cursor = con.cursor()
         cursor.execute("SELECT * FROM MEMBERS WHERE EMAIL = %s AND PASSWORD = %s",(email, password))
         result = cursor.fetchall()
-        print(result)
+        # print(result)
         
         if len(result)> 0:
             # 設定JWT的有效期限
@@ -418,16 +567,16 @@ def bookingPost():
                 "error": True,
                 "message": "未登入"
             }), 403
-        print(authorizationHeaders)
+        # print(authorizationHeaders)
         payload = jwt.decode(token, "secret", algorithms="HS256")
-        print(payload)
+        # print(payload)
 
         email = payload["email"]
         con = get_conn()
         cursor = con.cursor()
         cursor.execute("SELECT * FROM MEMBERS WHERE EMAIL = %s",(email,))
         user_data = cursor.fetchone()
-        print(user_data)
+        # print(user_data)
        
         # 拿取Token中的過期時間
         token_exp = payload.get("exp")
@@ -514,14 +663,14 @@ def bookingDelete():
             }), 403
         
         payload = jwt.decode(token, "secret", algorithms="HS256")
-        print(payload)
+        # print(payload)
 
         email = payload["email"]
         con = get_conn()
         cursor = con.cursor()
         cursor.execute("SELECT * FROM MEMBERS WHERE EMAIL = %s",(email,))
         user_data = cursor.fetchone()
-        print(user_data)
+        # print(user_data)
        
         # 拿取Token中的過期時間
         token_exp = payload.get("exp")
@@ -572,14 +721,14 @@ def bookingGet():
             }), 403
         
         payload = jwt.decode(token, "secret", algorithms="HS256")
-        print(payload)
+        # print(payload)
 
         email = payload["email"]
         con = get_conn()
         cursor = con.cursor()
         cursor.execute("SELECT * FROM MEMBERS WHERE EMAIL = %s",(email,))
         user_data = cursor.fetchone()
-        print(user_data)
+        # print(user_data)
        
         # 拿取Token中的過期時間
         token_exp = payload.get("exp")
@@ -612,12 +761,12 @@ def bookingGet():
                 time = bookingResultTuple[4]
                 price = bookingResultTuple[5]
 
-                print("bookingResultTuple = " + str(bookingResultTuple))
+                # print("bookingResultTuple = " + str(bookingResultTuple))
                 con = get_conn()
                 cursor = con.cursor()
                 cursor.execute("SELECT name, address, file FROM taipei WHERE _id = %s", (attractionID,))
                 attractionResultList = cursor.fetchall()
-                print("attractionResultList = " + str(attractionResultList))
+                # print("attractionResultList = " + str(attractionResultList))
                 attractionResultTuple = attractionResultList[0]
                 cursor.close()
                 con.close()
@@ -627,7 +776,7 @@ def bookingGet():
                 imageStr = attractionResultTuple[2]
             
                 imgList = imageStr.split("http")
-                print("imgList = " + str(imgList))
+                # print("imgList = " + str(imgList))
                 image = "http" + imgList[1]
                 
                 return jsonify({
@@ -651,8 +800,9 @@ def bookingGet():
             "error": True,
             "message": str(e)
         }), 500
-    
+
+
+
+
 
 app.run(host="0.0.0.0", port=3000)
-
-

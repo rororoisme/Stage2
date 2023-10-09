@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TaipeiDayTrip</title>
+    <link rel="stylesheet" href="/static/css/thankyou.css" />
+  </head>
+  <body>
+    <div class="grayBackGround"></div>
+    <!-- navigation -->
+    <div class="navigation">
+      <div class="navigationBox">
+        <div class="frame2" onclick="backToHome()">
+          <div class="navigationText">台北一日遊</div>
+        </div>
+        <div class="frame1">
+          <botton class="BtnLeft navigationBtn" onclick="goBooking()"
+            >預定行程</botton
+          >
+          <botton class="BtnRight navigationBtn">登入/註冊</botton>
+        </div>
+      </div>
+    </div>
+    <!-- dialog -->
+    <div class="loginContainer">
+      <div class="loginBox">
+        <div class="decoraterBar"></div>
+        <img
+          src="/static/images/closeBtn.png"
+          class="closeBtn"
+          onclick="closeLoginBox()"
+        />
+        <div class="loginText">登入會員帳號</div>
+        <input type="text" placeholder="輸入電子信箱" class="loginEmail" />
+        <input type="password" placeholder="輸入密碼" class="loginPassword" />
+        <div class="loginBtn" onclick="login()">登入帳戶</div>
+        <div class="loginAlarm" onclick="goSignUp()">
+          還沒有帳戶？請點此註冊
+        </div>
+      </div>
+    </div>
+    <div class="signUpContainer">
+      <div class="signUpBox">
+        <div class="decoraterBar"></div>
+        <img
+          src="/static/images/closeBtn.png"
+          class="closeBtn"
+          onclick="closeSignUpBox()"
+        />
+        <div class="signUpText">註冊會員帳號</div>
+        <input
+          type="text"
+          name="name"
+          placeholder="輸入姓名"
+          class="signUpName"
+        />
+        <input
+          type="text"
+          name="email"
+          placeholder="輸入電子信箱"
+          class="signUpEmail"
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="輸入密碼"
+          class="signUpPassword"
+        />
+        <div class="signUpBtn" onclick="signUp()">註冊新帳戶</div>
+        <div class="signUpAlarm" onclick="goLogin()">
+          已經有帳戶了？點此登入
+        </div>
+      </div>
+    </div>
+    <!-- main -->
+    <div class="mainBox">
+      <div class="mainSection">
+        <div class="mainHeadline">行程預定成功，您的訂單編號如下</div>
+        <div class="orderNumber"></div>
+        <div class="noBookingText">請記住此編號，或到會員中心查詢歷史訂單</div>
+      </div>
+    </div>
+    <!-- footer -->
+    <footer>COPYRIGHT © 2021 台北一日遊</footer>
+    <script src="/static/js/thankyou.js"></script>
+  </body>
+</html>

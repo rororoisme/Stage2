@@ -1,3 +1,6 @@
+
+let attractionInformation;
+
 // title導回首頁
 function backToHome() {
     window.location.href = "/"
@@ -203,15 +206,17 @@ function getStatus(){
                     noBookingCSS();
                 } else {
                     console.log(data["data"])
+                    attractionInformation = data["data"];
                     attractionNameElem.textContent = data["data"]["attraction"]["name"];
                     sectionImageElem.src = data["data"]["attraction"]["image"];
                     sectionDateElem.textContent = data["data"]["date"];
-                    
+
                     if (data["data"]["time"] == "morning"){
                         sectionTimeElem.textContent = "早上 9 點到下午 4 點"
                     } else {
                         sectionTimeElem.textContent = "下午 2 點到晚上 8 點"
                     }
+                    
                     
                     if (data["data"]["price"] == "2000"){
                         sectionPriceElem.textContent = "新台幣 2000 元"
@@ -236,6 +241,149 @@ function goBooking() {
 }
 
 
+//------------------串接TapPay
+const tapPayAppId = 137241;
+const tapPayKey = "app_38SMa8FT2XGBb8ZDZTFk7TFSjG2srOFheEHg9VKAO7VV1b8McAywh2zKAwN2";
+let isOkGetPrime = false;
+
+function initTapPay() {
+    TPDirect.setupSDK(tapPayAppId, tapPayKey, "sandbox");
+
+	TPDirect.card.setup({
+		fields: {
+			number: {
+				element: '#cardNumberInput',
+				placeholder: '**** **** **** ****'
+			},
+			expirationDate: {
+				element: document.getElementById("cardExpireInput"),
+				placeholder: 'MM / YY'
+			},
+			ccv: {
+				element: '#cardCVVInput',
+				placeholder: 'CVV'
+			}
+		},
+		styles: {
+			'input': {
+				'color': 'gray'
+			},
+			'.valid': {
+				'color': 'green'
+			},
+			'.invalid': {
+				'color': 'red'
+			},
+            '@media screen and (max-width: 400px)': {
+                'input': {
+                    'color': 'orange'
+                }
+            }
+		},
+
+		isMaskCreditCardNumber: true, 
+        maskCreditCardNumberRange: {
+            beginIndex: 6, 
+            endIndex: 11
+        }
+    });
+
+    
+    // 管理輸入欄位 
+    // canGetPrime = 全部欄位輸入正確
+    TPDirect.card.onUpdate(function(update) {
+        console.log("Update !!!")
+        console.log(update)
+        let confirmBtn = document.querySelector(".confirmBtn");
+
+		if(update.canGetPrime) {
+			isOkGetPrime = true;
+		}
+		else {
+			isOkGetPrime = false;
+		}
+    })
+
+}
+
+
+
+
+let confirmBtn = document.querySelector(".confirmBtn");
+confirmBtn.addEventListener("click",()=>{
+
+    if(isOkGetPrime) {
+        const tappayStatus = TPDirect.card.getTappayFieldsStatus();
+
+        if(tappayStatus.canGetPrime === false) {
+            alert("信用卡確認異常");
+            console.log("can not get prime");
+            return;
+        }
+
+        let bookingEmail = document.querySelector(".contactEmail").value;
+        let bookingPhone = document.querySelector(".contactNumber").value;
+        let bookingName = document.querySelector(".contactName").value;
+        // 擋住未輸入個人資訊就送出
+        if (bookingEmail == undefined || bookingEmail == "" ||
+        bookingPhone == undefined || bookingPhone == "" ||
+        bookingName == undefined || bookingName == "") {
+            alert("請輸入完整個人資訊")
+            return;
+        }
+
+        TPDirect.card.getPrime((result) => {
+            
+            if(result.status !== 0) {
+                alert("信用卡確認異常");
+                console.log("get prime error" + result.msg);
+                return;
+            }
+            console.log("get prime success");
+            console.log(result);
+
+            let price = attractionInformation.price;
+            delete  attractionInformation.price;
+            let data = {
+                "prime": result["card"]["prime"],
+                "order": {
+                  "price": price,
+                  "trip": attractionInformation,
+                  "contact": {
+                    "name": bookingName,
+                    "email": bookingEmail,
+                    "phone": bookingPhone
+                  }
+                }
+                
+            };
+            let token = window.localStorage.getItem('token');
+            fetch(`/api/orders`,{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "bearer " + token
+                },
+                body:JSON.stringify(data)
+            }).then(function(response){
+                return response.json();
+            }).then(function(data){
+                console.log(data);
+                if (data["data"]['payment']["status"] == 0) {
+                    window.location.href = "/thankyou?number=" + data["data"]["number"];
+                } else {
+                    alert("付款失敗");
+                }
+            })
+        });
+    }
+    else {
+        alert("信用卡資訊不完整");
+    }
+})
+
+
+initTapPay();
 getStatus();
 
 

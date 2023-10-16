@@ -56,10 +56,9 @@ fetch(`/api/attractions?page=0`, {
 }).then(function(data){
     nextPage = data['nextPage'];
     let arr = data["data"];
-    console.log("第一次載 " + arr.length)
     const attractionsGroup = document.querySelector('.attractionsGroup');
     attractionsGroup.classList.add('container');
-    // // 迴圈建立各個景點的畫面元素
+    // 迴圈建立各個景點的畫面元素
     for (let i = 0; i < arr.length; i++) {
         const attraction = arr[i];
 

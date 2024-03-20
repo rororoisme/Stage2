@@ -95,7 +95,7 @@ img {
     justify-content: center;
     text-align: center;
     margin-top: 60px;
-    height: 250px;
+    height: 350px;
     border-radius: 6px 6px 0px 0px;
     z-index: 999;
 }
@@ -150,6 +150,7 @@ img {
     font-size: 19px;
     font-weight: 400;
     line-height: 47px;
+    margin:5px;
 }
 
 .loginAlarm {
@@ -376,8 +377,17 @@ img {
     font-weight: 700;
 }
 
-.paymentBox {
-    /* margin: 40px 110px; */
+.test {
+    background-color: #489;
+    color: #fff;
+    padding: 5px 15px;
+    font-size: 19px;
+    font-weight: 400;
+    width: 180px;
+    border-radius: 5px;
+    border: none;
+    text-align: center;
+    position: relative;
 }
 
 .paymentTitle {
@@ -411,6 +421,10 @@ img {
     height: 30px;
     padding-left: 10px;
     font-weight: 500; 
+}
+
+.paymentTestMsg {
+    color: #489;
 }
 
 .confirm {

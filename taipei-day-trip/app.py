@@ -12,7 +12,6 @@ app=Flask(__name__)
 app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 
-
 # 建立資料
 # 建立資料庫連線
 def get_conn():
@@ -806,3 +805,9 @@ def bookingGet():
 
 
 app.run(host="0.0.0.0", port=3000)
+
+
+
+# 1. 看完程式碼，順過，寫成整齊的code
+# 2. 登入 寫資料庫 打tappay > 登入:抓header, jwt, 檢查jwt 
+# 3. def login: 找最小公約數,    def tappay:

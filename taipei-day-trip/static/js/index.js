@@ -56,10 +56,9 @@ fetch(`/api/attractions?page=0`, {
 }).then(function(data){
     nextPage = data['nextPage'];
     let arr = data["data"];
-    console.log("第一次載 " + arr.length)
     const attractionsGroup = document.querySelector('.attractionsGroup');
     attractionsGroup.classList.add('container');
-    // // 迴圈建立各個景點的畫面元素
+    // 迴圈建立各個景點的畫面元素
     for (let i = 0; i < arr.length; i++) {
         const attraction = arr[i];
 
@@ -326,6 +325,11 @@ function login(){
     })
 }
 
+function testAccountLogin() {
+    document.querySelector('.loginEmail').value = 'test@example.com';
+    document.querySelector('.loginPassword').value = 'password123';
+}
+
 function goLogin(){
     let loginContainer = document.querySelector(".loginContainer");
     let loginBox = document.querySelector(".loginBox");
@@ -406,6 +410,12 @@ function goSignUp(){
     grayBackGround.style.display = "flex";
 }
 
+function testAccountSignUp() {
+    document.querySelector('.signUpName').value = 'test';
+    document.querySelector('.signUpEmail').value = 'test@example.com';
+    document.querySelector('.signUpPassword').value = 'password123';
+}
+
 function getStatus(){
     let token = window.localStorage.getItem("token");
 
@@ -442,7 +452,7 @@ function logout(){
     console.log("Call logout")
     window.localStorage.setItem("token","");
     // 連線目標網址 = 當前網址
-    window.location.href = window.location.pathname;
+    window.location.href = "/";
 }
 
 function goBooking(){

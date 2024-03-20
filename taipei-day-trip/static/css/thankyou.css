@@ -95,7 +95,7 @@ img {
     justify-content: center;
     text-align: center;
     margin-top: 60px;
-    height: 250px;
+    height: 350px;
     border-radius: 6px 6px 0px 0px;
     z-index: 999;
 }
@@ -150,6 +150,7 @@ img {
     font-size: 19px;
     font-weight: 400;
     line-height: 47px;
+    margin:5px;
 }
 
 .loginAlarm {
@@ -178,7 +179,7 @@ img {
     justify-content: center;
     text-align: center;
     margin-top: 60px;
-    height: 300px;
+    height: 350px;
     border-radius: 6px 6px 0px 0px;
     z-index: 999;
 }

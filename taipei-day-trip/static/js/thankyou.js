@@ -8,6 +8,11 @@ let keyword = "";
 let listBarElem = document.querySelector(".listBarContainer")
 let attractionElem = document.querySelector(".attractionsGroup")
 
+function testAccountLogin() {
+    document.querySelector('.loginEmail').value = 'test@example.com';
+    document.querySelector('.loginPassword').value = 'password123';
+}
+
 function goLogin(){
     let loginContainer = document.querySelector(".loginContainer");
     let loginBox = document.querySelector(".loginBox");
@@ -35,7 +40,25 @@ function goBooking(){
     window.location.href = "/booking";
 }
 
+function goSignUp(){
+    console.log("Call goSignUp")
+    let loginContainer = document.querySelector(".loginContainer");
+    let loginBox = document.querySelector(".loginBox");
+    let signUpContainer = document.querySelector(".signUpContainer");
+    let signUpBox = document.querySelector(".signUpBox")
+    let grayBackGround = document.querySelector(".grayBackGround")
+    signUpContainer.style.display = "flex";
+    signUpBox.style.display = "flex";
+    loginContainer.style.display = "none";
+    loginBox.style.display = "none";
+    grayBackGround.style.display = "flex";
+}
 
+function testAccountSignUp() {
+    document.querySelector('.signUpName').value = 'test';
+    document.querySelector('.signUpEmail').value = 'test@example.com';
+    document.querySelector('.signUpPassword').value = 'password123';
+}
 
 function getStatus(){
     let token = window.localStorage.getItem('token');

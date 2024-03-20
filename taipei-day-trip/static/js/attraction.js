@@ -152,7 +152,7 @@ function logout(){
     console.log("Call logout")
     window.localStorage.setItem("token","");
     // 連線目標網址 = 當前網址
-    window.location.href = window.location.pathname;
+    window.location.href = "/";
 }
 
 function login(){
@@ -177,6 +177,11 @@ function login(){
         // 連線目標網址 = 當前網址
         window.location.href = window.location.pathname ;
     })
+}
+
+function testAccountLogin() {
+    document.querySelector('.loginEmail').value = 'test@example.com';
+    document.querySelector('.loginPassword').value = 'password123';
 }
 
 function goLogin(){
@@ -259,6 +264,11 @@ function goSignUp(){
     grayBackGround.style.display = "flex";
 }
 
+function testAccountSignUp() {
+    document.querySelector('.signUpName').value = 'test';
+    document.querySelector('.signUpEmail').value = 'test@example.com';
+    document.querySelector('.signUpPassword').value = 'password123';
+}
 
 
 function getStatus(){

@@ -56,6 +56,10 @@ def pay(price, prime, phone, name, email):
     print(response.text)
     return response.json()
 
+@app.route("/.well-known/acme-challenge/5xxnE_lYjMaIOglKF9BIeGvlIE-m3zoPOlsnSJz_o8w", methods=["GET"])
+def https_verify():
+    return "5xxnE_lYjMaIOglKF9BIeGvlIE-m3zoPOlsnSJz_o8w.8cZ--a4_4H1V42M37NrFXkAn86a6390X95lDaZj6OXg"
+
 
 @app.route("/api/orders", methods=["POST"])
 def payByPrime():
@@ -804,10 +808,6 @@ def bookingGet():
 
 
 
-app.run(host="0.0.0.0", port=3000)
 
+app.run(host="0.0.0.0", port=80)
 
-
-# 1. 看完程式碼，順過，寫成整齊的code
-# 2. 登入 寫資料庫 打tappay > 登入:抓header, jwt, 檢查jwt 
-# 3. def login: 找最小公約數,    def tappay:
